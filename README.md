@@ -1,5 +1,7 @@
 # APD Website
 
+[![Live Website](https://img.shields.io/badge/Live%20Website-Visit-gold?style=for-the-badge)](https://apd-website-rho.vercel.app)
+
 ![APD Website Preview](./docs/website-preview.png)
 
 Official website of the **Assemblage of Programmers and Developers (APD)**, the student technology organization of **FEU Diliman**.
