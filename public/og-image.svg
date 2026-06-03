@@ -1,0 +1,33 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#050505"></rect>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.28"></rect>
+  <circle cx="945" cy="120" r="260" fill="#FACC15" opacity="0.16"></circle>
+  <circle cx="220" cy="520" r="240" fill="#F59E0B" opacity="0.12"></circle>
+  <rect x="56" y="56" width="1088" height="518" rx="38" stroke="#FACC15" stroke-opacity="0.35" stroke-width="2"></rect>
+
+  <text x="90" y="150" fill="#FACC15" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="8">
+    FEU DILIMAN APD
+  </text>
+
+  <text x="90" y="285" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800">
+    Assemblage of
+  </text>
+
+  <text x="90" y="372" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800">
+    Programmers and
+  </text>
+
+  <text x="90" y="459" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800">
+    Developers
+  </text>
+
+  <text x="90" y="525" fill="#FFFFFF" fill-opacity="0.68" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="500">
+    Build. Collaborate. Innovate.
+  </text>
+
+  <defs>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M 42 0 L 0 0 0 42" fill="none" stroke="#FFFFFF" stroke-opacity="0.14" stroke-width="1"></path>
+    </pattern>
+  </defs>
+</svg>

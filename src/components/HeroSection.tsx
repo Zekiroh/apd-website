@@ -1,0 +1,282 @@
+import { motion, useReducedMotion } from 'framer-motion'
+import {
+  ArrowRight,
+  Braces,
+  Code2,
+  Cpu,
+  Sparkles,
+  Terminal,
+} from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+
+type CodeToken = {
+  text: string
+  className?: string
+}
+
+const codeRows: CodeToken[][] = [
+  [{ text: '// FEU Diliman APD', className: 'text-white/40' }],
+  [
+    { text: 'const', className: 'text-fuchsia-400' },
+    { text: ' ' },
+    { text: 'mission', className: 'text-sky-300' },
+    { text: ' = ', className: 'text-white/80' },
+    { text: '"build with purpose"', className: 'text-lime-300' },
+    { text: ';', className: 'text-white' },
+  ],
+  [
+    { text: 'const', className: 'text-fuchsia-400' },
+    { text: ' ' },
+    { text: 'community', className: 'text-sky-300' },
+    { text: ' = ', className: 'text-white/80' },
+    { text: '[', className: 'text-white' },
+  ],
+  [{ text: '  "programmers",', className: 'text-lime-300' }],
+  [{ text: '  "developers",', className: 'text-lime-300' }],
+  [{ text: '  "designers",', className: 'text-lime-300' }],
+  [{ text: '  "innovators"', className: 'text-lime-300' }],
+  [{ text: '];', className: 'text-white' }],
+  [
+    { text: 'const', className: 'text-fuchsia-400' },
+    { text: ' ' },
+    { text: 'organization', className: 'text-sky-300' },
+    { text: ' = ', className: 'text-white/80' },
+    {
+      text: '"Assemblage of Programmers and Developers"',
+      className: 'text-yellow-300',
+    },
+    { text: ';', className: 'text-white' },
+  ],
+  [
+    { text: 'launch', className: 'text-cyan-400' },
+    { text: '(', className: 'text-white' },
+    { text: 'APD', className: 'text-yellow-300' },
+    { text: ', ', className: 'text-white' },
+    { text: 'FEUDiliman', className: 'text-orange-400' },
+    { text: ');', className: 'text-white' },
+  ],
+]
+
+export default function HeroSection() {
+  const shouldReduceMotion = useReducedMotion()
+  const [typedLength, setTypedLength] = useState(0)
+
+  const totalCodeLength = useMemo(() => {
+    return codeRows.reduce((total, row) => {
+      return total + row.reduce((sum, token) => sum + token.text.length, 0)
+    }, 0)
+  }, [])
+
+  useEffect(() => {
+    if (shouldReduceMotion) return
+
+    const interval = window.setInterval(() => {
+      setTypedLength((currentLength) => {
+        if (currentLength >= totalCodeLength) {
+          window.clearInterval(interval)
+          return currentLength
+        }
+
+        return currentLength + 1
+      })
+    }, 20)
+
+    return () => {
+      window.clearInterval(interval)
+    }
+  }, [shouldReduceMotion, totalCodeLength])
+
+  const renderTypedCode = () => {
+    const visibleCodeLength = shouldReduceMotion ? totalCodeLength : typedLength
+
+    let remainingCharacters = visibleCodeLength
+    let cursorPlaced = false
+    const isTypingComplete = visibleCodeLength >= totalCodeLength
+
+    return codeRows.map((row, rowIndex) => {
+      const rowLength = row.reduce(
+        (sum, token) => sum + token.text.length,
+        0,
+      )
+
+      const visibleCharacters = Math.min(
+        Math.max(remainingCharacters, 0),
+        rowLength,
+      )
+
+      const shouldShowCursor =
+        (!cursorPlaced && remainingCharacters <= rowLength) ||
+        (isTypingComplete && rowIndex === codeRows.length - 1)
+
+      if (shouldShowCursor) {
+        cursorPlaced = true
+      }
+
+      remainingCharacters -= rowLength
+
+      let consumedCharacters = 0
+
+      return (
+        <p key={`code-row-${rowIndex}`}>
+          {row.map((token, tokenIndex) => {
+            const tokenStart = consumedCharacters
+            const tokenEnd = tokenStart + token.text.length
+
+            const visibleText = token.text.slice(
+              0,
+              Math.max(0, visibleCharacters - tokenStart),
+            )
+
+            consumedCharacters = tokenEnd
+
+            if (!visibleText) return null
+
+            return (
+              <span
+                key={`code-token-${rowIndex}-${tokenIndex}`}
+                className={token.className}
+              >
+                {visibleText}
+              </span>
+            )
+          })}
+
+          {shouldShowCursor && (
+            <span className="ml-px animate-pulse text-yellow-300">▍</span>
+          )}
+        </p>
+      )
+    })
+  }
+
+  return (
+    <div className="relative z-10 mx-auto grid min-h-[calc(100vh-160px)] max-w-7xl items-center gap-14 py-16 lg:grid-cols-[1.1fr_0.9fr]">
+      <motion.div
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.5 }}
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-4 py-2 text-sm text-yellow-200"
+        >
+          <Sparkles size={16} aria-hidden="true" />
+          Official student tech organization
+        </motion.div>
+
+        <motion.h2
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.7 }}
+          className="max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl"
+        >
+          Assemblage of{' '}
+          <span className="bg-linear-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+            Programmers
+          </span>{' '}
+          and Developers
+        </motion.h2>
+
+        <motion.p
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25, duration: 0.7 }}
+          className="mt-6 max-w-2xl text-lg leading-8 text-white/65"
+        >
+          A community of FEU Diliman students building skills, projects, and
+          opportunities through technology, creativity, and collaboration.
+        </motion.p>
+
+        <motion.div
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.7 }}
+          className="mt-9 flex flex-col gap-4 sm:flex-row"
+        >
+          <a
+            href="#about"
+            className="group inline-flex items-center justify-center gap-2 rounded-full bg-yellow-400 px-7 py-4 font-semibold text-black outline-none transition hover:bg-yellow-300 focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          >
+            Explore APD
+            <ArrowRight
+              size={18}
+              aria-hidden="true"
+              className="transition group-hover:translate-x-1"
+            />
+          </a>
+
+          <a
+            href="#projects"
+            className="inline-flex items-center justify-center rounded-full border border-white/15 px-7 py-4 font-semibold text-white/80 outline-none transition hover:border-yellow-300/40 hover:bg-yellow-400/10 hover:text-white focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          >
+            View Projects
+          </a>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        initial={
+          shouldReduceMotion ? false : { opacity: 0, x: 50, scale: 0.95 }
+        }
+        animate={{ opacity: 1, x: 0, scale: 1 }}
+        transition={{
+          delay: 0.25,
+          duration: 0.9,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="relative"
+        aria-hidden="true"
+      >
+        <motion.div
+          animate={shouldReduceMotion ? undefined : { y: [0, -10, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -left-10 top-10 z-20 hidden h-12 w-12 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md xl:flex"
+        >
+          <Code2 size={22} />
+        </motion.div>
+
+        <motion.div
+          animate={shouldReduceMotion ? undefined : { y: [0, 9, 0] }}
+          transition={{ duration: 6.8, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute right-10 -top-6 z-20 hidden h-11 w-11 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md xl:flex"
+        >
+          <Braces size={20} />
+        </motion.div>
+
+        <motion.div
+          animate={shouldReduceMotion ? undefined : { y: [0, 12, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -right-8 top-28 z-20 hidden h-11 w-11 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md xl:flex"
+        >
+          <Terminal size={20} />
+        </motion.div>
+
+        <motion.div
+          animate={shouldReduceMotion ? undefined : { y: [0, -8, 0] }}
+          transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -bottom-4 left-12 z-20 hidden h-10 w-10 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md xl:flex"
+        >
+          <Cpu size={19} />
+        </motion.div>
+
+        <div className="absolute inset-0 rounded-4xl bg-yellow-400/15 blur-3xl" />
+
+        <div className="relative z-10 animate-float rounded-4xl border border-yellow-300/20 bg-white/6 p-5 shadow-2xl shadow-yellow-500/10 backdrop-blur-xl">
+          <div className="rounded-3xl border border-white/10 bg-black/40 p-5">
+            <div className="mb-5 flex gap-2">
+              <span className="h-3 w-3 rounded-full bg-red-400" />
+              <span className="h-3 w-3 rounded-full bg-yellow-400" />
+              <span className="h-3 w-3 rounded-full bg-emerald-400" />
+            </div>
+
+            <div className="space-y-4 font-mono text-sm">
+              {renderTypedCode()}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
