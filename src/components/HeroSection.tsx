@@ -9,6 +9,10 @@ import {
 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
+type HeroSectionProps = {
+  isPageReady: boolean
+}
+
 type CodeToken = {
   text: string
   className?: string
@@ -57,7 +61,7 @@ const codeRows: CodeToken[][] = [
   ],
 ]
 
-export default function HeroSection() {
+export default function HeroSection({ isPageReady }: HeroSectionProps) {
   const shouldReduceMotion = useReducedMotion()
   const codeBlockRef = useRef<HTMLDivElement | null>(null)
   const isCodeVisible = useInView(codeBlockRef, {
@@ -68,6 +72,8 @@ export default function HeroSection() {
 
   const [typedLength, setTypedLength] = useState(0)
 
+  const shouldAnimate = shouldReduceMotion || isPageReady
+
   const totalCodeLength = useMemo(() => {
     return codeRows.reduce((total, row) => {
       return total + row.reduce((sum, token) => sum + token.text.length, 0)
@@ -75,23 +81,40 @@ export default function HeroSection() {
   }, [])
 
   useEffect(() => {
-    if (shouldReduceMotion || !isCodeVisible) return
+    if (
+      shouldReduceMotion ||
+      !isCodeVisible ||
+      !isPageReady
+    ) {
+      return
+    }
 
-    const interval = window.setInterval(() => {
-      setTypedLength((currentLength) => {
-        if (currentLength >= totalCodeLength) {
-          window.clearInterval(interval)
-          return currentLength
-        }
+    const startDelay = window.setTimeout(() => {
+      const interval = window.setInterval(() => {
+        setTypedLength((currentLength) => {
+          if (currentLength >= totalCodeLength) {
+            window.clearInterval(interval)
+            return currentLength
+          }
 
-        return currentLength + 1
-      })
-    }, 20)
+          return currentLength + 1
+        })
+      }, 22)
+
+      return () => {
+        window.clearInterval(interval)
+      }
+    }, 900)
 
     return () => {
-      window.clearInterval(interval)
+      window.clearTimeout(startDelay)
     }
-  }, [isCodeVisible, shouldReduceMotion, totalCodeLength])
+  }, [
+    isCodeVisible,
+    isPageReady,
+    shouldReduceMotion,
+    totalCodeLength,
+  ])
 
   const renderTypedCode = () => {
     const visibleCodeLength = shouldReduceMotion ? totalCodeLength : typedLength
@@ -160,13 +183,17 @@ export default function HeroSection() {
     <div className="relative z-10 mx-auto grid min-h-[calc(100vh-160px)] max-w-7xl items-center gap-14 py-16 lg:grid-cols-[1.1fr_0.9fr]">
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1, duration: 0.5 }}
+          animate={
+            shouldAnimate
+              ? { opacity: 1, scale: 1 }
+              : { opacity: 0, scale: 0.95 }
+          }
+          transition={{ delay: 0.25, duration: 0.55 }}
           className="mb-6 inline-flex items-center gap-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 px-4 py-2 text-sm text-yellow-200"
         >
           <Sparkles size={16} aria-hidden="true" />
@@ -175,8 +202,8 @@ export default function HeroSection() {
 
         <motion.h2
           initial={shouldReduceMotion ? false : { opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.7 }}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
+          transition={{ delay: 0.45, duration: 0.8 }}
           className="max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl"
         >
           Assemblage of{' '}
@@ -205,8 +232,8 @@ export default function HeroSection() {
 
         <motion.p
           initial={shouldReduceMotion ? false : { opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 0.7 }}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
+          transition={{ delay: 0.65, duration: 0.8 }}
           className="mt-6 max-w-2xl text-lg leading-8 text-white/65"
         >
           A community of FEU Diliman students building skills, projects, and
@@ -215,8 +242,8 @@ export default function HeroSection() {
 
         <motion.div
           initial={shouldReduceMotion ? false : { opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.7 }}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
+          transition={{ delay: 0.85, duration: 0.8 }}
           className="mt-9 flex flex-col gap-4 sm:flex-row"
         >
           <a
@@ -244,17 +271,23 @@ export default function HeroSection() {
         initial={
           shouldReduceMotion ? false : { opacity: 0, x: 50, scale: 0.95 }
         }
-        animate={{ opacity: 1, x: 0, scale: 1 }}
+        animate={
+          shouldAnimate
+            ? { opacity: 1, x: 0, scale: 1 }
+            : { opacity: 0, x: 50, scale: 0.95 }
+        }
         transition={{
-          delay: 0.25,
-          duration: 0.9,
+          delay: 1,
+          duration: 1,
           ease: [0.22, 1, 0.36, 1],
         }}
         className="relative"
         aria-hidden="true"
       >
         <motion.div
-          animate={shouldReduceMotion ? undefined : { y: [0, -10, 0] }}
+          animate={
+            shouldAnimate && !shouldReduceMotion ? { y: [0, -10, 0] } : undefined
+          }
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute -left-3 top-8 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:-left-6 sm:h-10 sm:w-10 xl:-left-10 xl:h-12 xl:w-12"
         >
@@ -262,7 +295,9 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.div
-          animate={shouldReduceMotion ? undefined : { y: [0, 9, 0] }}
+          animate={
+            shouldAnimate && !shouldReduceMotion ? { y: [0, 9, 0] } : undefined
+          }
           transition={{ duration: 6.8, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute right-6 -top-4 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:right-10 sm:h-10 sm:w-10 xl:-top-6 xl:h-11 xl:w-11"
         >
@@ -270,7 +305,9 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.div
-          animate={shouldReduceMotion ? undefined : { y: [0, 12, 0] }}
+          animate={
+            shouldAnimate && !shouldReduceMotion ? { y: [0, 12, 0] } : undefined
+          }
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute -right-2 top-24 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:-right-4 sm:h-10 sm:w-10 xl:-right-8 xl:top-28 xl:h-11 xl:w-11"
         >
@@ -278,7 +315,9 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.div
-          animate={shouldReduceMotion ? undefined : { y: [0, -8, 0] }}
+          animate={
+            shouldAnimate && !shouldReduceMotion ? { y: [0, -8, 0] } : undefined
+          }
           transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute -bottom-4 left-10 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:left-12 sm:h-10 sm:w-10"
         >

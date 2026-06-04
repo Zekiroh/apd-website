@@ -120,7 +120,7 @@ export default function App() {
           </div>
 
           <Navbar />
-          <HeroSection />
+          <HeroSection isPageReady={!isLoading} />
         </section>
 
         <AboutSection />
