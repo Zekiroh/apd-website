@@ -1,11 +1,67 @@
 import {
+  BookOpen,
   Code2,
   Globe2,
+  GraduationCap,
+  Lightbulb,
   QrCode,
   Rocket,
   Smartphone,
+  Sparkles,
+  Trophy,
   Users,
 } from 'lucide-react'
+
+import buildingTheNextApdImage from '../assets/community/building-the-next-apd.jpg'
+import buildingTheNextApdImage2 from '../assets/community/building-the-nextapd-1.jpg'
+import buildingTheNextApdImage3 from '../assets/community/building-the-nextapd-2.jpg'
+import capstoneExcellenceImage from '../assets/community/capstone-excellence.jpg'
+import capstoneExcellenceImage2 from '../assets/community/capstone-excellence-1.jpg'
+import capstoneExcellenceProfImage from '../assets/community/capstone-excellence-prof.jpg'
+import capstoneExcellenceAward from '../assets/community/capstone-excellence-awards.jpg'
+import firstApdImage2 from '../assets/community/first-apd-1.jpg'
+import firstApdImage3 from '../assets/community/first-apd-2.jpg'
+import firstApdImage4 from '../assets/community/first-apd-3.jpg'
+import firstApdImage5 from '../assets/community/first-apd-4.jpg'
+import firstApdImage6 from '../assets/community/first-apd-5.jpg'
+import firstApdImage7 from '../assets/community/first-apd-6.jpg'
+import gameAndGoImage from '../assets/community/game-and-go.jpg'
+import gameAndGoPcImage from '../assets/community/game-andgo-pc.jpg'
+import gameAndGoPsImage from '../assets/community/game-andgo-ps.jpg'
+import gameAndGoHeartImage from '../assets/community/game-andgo-heart.jpg'
+import gameAndGoImage1 from '../assets/community/game-andgo-1.jpg'
+import gameAndGoImage2 from '../assets/community/game-andgo-2.jpg'
+import geekyGatewayImage from '../assets/community/geeky-gateway-all.jpg'
+import geekyGatewayImage1 from '../assets/community/geeky-gateway-1.jpg'
+import geekyGatewayImage2 from '../assets/community/geeky-gateway-2.jpg'
+import geekyGatewayImage3 from '../assets/community/geeky-gateway-3.jpg'
+import geekyGatewayImage4 from '../assets/community/geeky-gateway-4.jpg'
+import geekyGatewayImage5 from '../assets/community/geeky-gateway-5.jpg'
+import geekyGatewayMandarinImage from '../assets/community/geeky-gateway-mandarin.jpg'
+import generalAssemblyFormerPImage from '../assets/community/general-assembly-formerp.jpg'
+import generalAssemblyProfImage from '../assets/community/general-assembly-prof.jpg'
+import itPaloozaImage from '../assets/community/it-palooza.jpg'
+import itPaloozaImage2 from '../assets/community/it-palooza-1.jpg'
+import itPaloozaFounderImage from '../assets/community/it-palooza-founder.jpg'
+import itPaloozaGameImage1 from '../assets/community/it-palooza-game1.jpg'
+import itPaloozaGameImage2 from '../assets/community/it-palooza-game2.jpg'
+import itPaloozaGameImage3 from '../assets/community/it-palooza-game3.jpg'
+import itWeekAdviserImage from '../assets/community/it-week-apdadviser.jpg'
+import itWeekEventImage from '../assets/community/it-week-event.jpg'
+import itWeekImage from '../assets/community/it-week.jpg'
+import itWeekImage1 from '../assets/community/it-week-1.jpeg'
+import itWeekImage2 from '../assets/community/it-week-2.jpeg'
+import itWeekOfficersImage from '../assets/community/it-week-officers.jpg'
+import web3aiImage from '../assets/community/web3ai.jpg'
+import web3aiGroupImage from '../assets/community/web3ai-1.jpg'
+import web3aiGroupImage2 from '../assets/community/web3ai-2.jpg'
+import web3aiGroupImage3 from '../assets/community/web3ai-3.jpg'
+import web3aiGroupImage4 from '../assets/community/web3ai-4.jpg'
+import web3aiGroupImage5 from '../assets/community/web3ai-5.jpg'
+import welcomeCelebrationHoopshotImage from '../assets/community/welcome-celebration-hoopshot.jpg'
+import welcomeCelebrationImage from '../assets/community/welcome-celebration-2024.jpg'
+import welcomeCelebrationInclusivesImage from '../assets/community/welcome-celebration-inclusives.jpg'
+import welcomeCelebrationPlayersImage from '../assets/community/welcome-celebration-players.jpg'
 
 export const highlights = [
   {
@@ -60,6 +116,158 @@ export const featuredProjects = [
       'A centralized platform for APD members featuring attendance tracking, events, community engagement, member profiles, and future developer growth initiatives.',
     status: 'Coming Soon',
     repositoryUrl: '',
+  },
+]
+
+export const communityVideoUrl =
+  'https://www.facebook.com/reel/893277285620052'
+
+export const communityHighlights = [
+  {
+    title: 'Innovation & Research',
+    description:
+      'Celebrating student innovation, technical excellence, and real-world solutions through capstone projects and research initiatives.',
+    icon: Trophy,
+  },
+  {
+    title: 'Community Engagement',
+    description:
+      'Building friendships, collaboration, leadership, and memorable experiences that strengthen the APD community.',
+    icon: Users,
+  },
+  {
+    title: 'Technology Conferences',
+    description:
+      'Exploring emerging technologies, artificial intelligence, cybersecurity, and future trends through conferences and technology forums.',
+    icon: Lightbulb,
+  },
+  {
+    title: 'Professional Development',
+    description:
+      'Preparing students for the industry through webinars, career orientations, technical workshops, and professional development programs.',
+    icon: GraduationCap,
+  },
+]
+
+export const communityGalleryItems = [
+  {
+    title: 'Building the Next APD',
+    category: 'Leadership & Growth',
+    images: [
+      buildingTheNextApdImage,
+      buildingTheNextApdImage2,
+      buildingTheNextApdImage3,
+      generalAssemblyFormerPImage,
+      generalAssemblyProfImage,
+      itWeekImage,
+      itWeekImage1,
+      itWeekImage2,
+      itWeekAdviserImage,
+      itWeekEventImage,
+      itWeekOfficersImage,
+    ],
+  },
+  {
+    title: 'Capstone Excellence',
+    category: 'Seminar & Innovation',
+    images: [
+      capstoneExcellenceImage,
+      capstoneExcellenceImage2,
+      capstoneExcellenceProfImage,
+      capstoneExcellenceAward,
+    ],
+  },
+  {
+    title: 'Geeky Gateway',
+    category: 'Community Event',
+    images: [
+      geekyGatewayImage,
+      geekyGatewayMandarinImage,
+      geekyGatewayImage1,
+      geekyGatewayImage2,
+      geekyGatewayImage3,
+      geekyGatewayImage4,
+      geekyGatewayImage5,
+    ],
+  },
+  {
+    title: 'Web3AI',
+    category: 'Technology & AI',
+    images: [
+      web3aiImage,
+      web3aiGroupImage, 
+      web3aiGroupImage2,
+      web3aiGroupImage3,
+      web3aiGroupImage4,
+      web3aiGroupImage5,
+    ],
+  },
+  {
+    title: 'Welcome Celebration',
+    category: 'Member Engagement',
+    images: [
+      welcomeCelebrationImage,
+      welcomeCelebrationHoopshotImage,
+      welcomeCelebrationInclusivesImage,
+      welcomeCelebrationPlayersImage,
+    ],
+  },
+  {
+    title: 'Game and Go',
+    category: 'Community Activity',
+    images: [
+      gameAndGoImage,
+      gameAndGoImage1,
+      gameAndGoImage2, 
+      gameAndGoPcImage, 
+      gameAndGoPsImage,
+      gameAndGoHeartImage,
+    ],
+  },
+  {
+    title: 'IT Palooza',
+    category: 'Technology Event',
+    images: [
+      itPaloozaImage,
+      itPaloozaImage2,
+      itPaloozaFounderImage,
+      itPaloozaGameImage1,
+      itPaloozaGameImage2,
+      itPaloozaGameImage3,
+    ],
+  },
+  {
+    title: 'APD Founding Generation',
+    category: 'Organization Legacy',
+    images: [
+      firstApdImage2,
+      firstApdImage3,
+      firstApdImage4,
+      firstApdImage5,
+      firstApdImage6,
+      firstApdImage7,
+    ],
+  },
+]
+
+export const communityValues = [
+  {
+    title: 'Learn',
+    description:
+      'Continuously develop technical and professional skills through collaboration and hands-on experience.',
+    icon: BookOpen,
+  },
+  {
+    title: 'Build',
+    description:
+      'Transform ideas into meaningful projects that create value for students and the community.',
+    icon: Code2,
+  },
+  {
+    title: 'Grow',
+    description:
+      'Develop leadership, confidence, and lifelong connections that extend beyond the classroom.',
+    icon: Sparkles,
   },
 ]
 

@@ -1,6 +1,7 @@
 import { AnimatePresence } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import AboutSection from './components/AboutSection'
+import CommunityCultureSection from './components/CommunityCultureSection'
 import EventsSection from './components/EventsSection'
 import Footer from './components/Footer'
 import HeroSection from './components/HeroSection'
@@ -125,6 +126,7 @@ export default function App() {
 
         <AboutSection />
         <WhatWeDoSection />
+        <CommunityCultureSection />
         <ProjectsSection />
         <OfficersSection />
         <EventsSection />
