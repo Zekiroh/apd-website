@@ -14,24 +14,21 @@
 
 Official website of the **Assemblage of Programmers and Developers (APD)**, the student technology organization of **FEU Diliman**.
 
-The website serves as the organization's online presence, showcasing its mission, officers, projects, events, and community initiatives while providing students and visitors with a modern and accessible platform to learn more about APD.
+The website highlights APD's projects, officers, events, community activities, achievements, and organizational history while serving as APD's official online presence.
 
 ---
 
 ## Features
 
-- Responsive design for desktop and mobile devices
-- Modern black and gold APD branding
-- Interactive APD Terminal boot experience
-- Interactive hero section with developer-inspired visuals
-- Organization overview and mission
-- Projects showcase
-- Officers directory
-- Events section
-- Recognition section
+- Responsive design for desktop and mobile
+- APD Terminal boot experience
+- Community highlights and media gallery
+- Featured projects showcase
+- Officer directory with profile links
+- Events and recognition sections
+- APD history and organization highlights
 - Contact and community links
-- SEO and Open Graph optimization
-- Accessibility improvements
+- SEO and Open Graph support
 
 ---
 
@@ -52,6 +49,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/Zekiroh/apd-website.git
+cd apd-website
 ```
 
 Install dependencies:
@@ -74,35 +72,15 @@ npm run build
 
 ---
 
-## Project Structure
-
-```txt
-src/
-├── components/
-├── data/
-├── assets/
-├── App.tsx
-└── main.tsx
-
-public/
-├── apd-logo.png
-├── favicon.svg
-└── og-image.svg
-```
-
----
-
 ## Roadmap
 
 Future improvements include:
 
-- Officer profile pages
 - Dynamic events
 - Dynamic projects
 - Contact form integration
-- Join APD workflow improvements
-- CMS integration
-- Backend API support
+- CMS support
+- APD Connect integration
 
 ---
 
@@ -111,6 +89,8 @@ Future improvements include:
 **Assemblage of Programmers and Developers (APD)**
 
 FEU Diliman
+
+Official student organization dedicated to programming, software development, innovation, collaboration, and student growth through projects, events, and community-driven learning.
 
 ---
 

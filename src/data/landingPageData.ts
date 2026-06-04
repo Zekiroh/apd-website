@@ -192,7 +192,7 @@ export const communityGalleryItems = [
   },
   {
     title: 'Web3AI',
-    category: 'Technology & AI',
+    category: 'Emerging Technologies',
     images: [
       web3aiImage,
       web3aiGroupImage, 
@@ -204,7 +204,7 @@ export const communityGalleryItems = [
   },
   {
     title: 'Welcome Celebration',
-    category: 'Member Engagement',
+    category: 'Community Engagement',
     images: [
       welcomeCelebrationImage,
       welcomeCelebrationHoopshotImage,
@@ -226,7 +226,7 @@ export const communityGalleryItems = [
   },
   {
     title: 'IT Palooza',
-    category: 'Technology Event',
+    category: 'General Assembly',
     images: [
       itPaloozaImage,
       itPaloozaImage2,
@@ -281,19 +281,19 @@ export const executiveBoard = [
   {
     role: 'President',
     name: 'John Paul Osias',
-    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/663019102D',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/491013202D',
   },
   {
     role: 'Vice President Internal',
     name: 'Giulia Margaux Villanueva',
     badge: 'VPI',
-    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/491013202D',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/312014202D',
   },
   {
     role: 'Vice President External',
     name: 'Gabriel L. Saavedra',
     badge: 'VPE',
-    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/312014202D',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/gabbysaavedra71',
   },
   {
     role: 'Secretary',
@@ -309,12 +309,12 @@ export const executiveBoard = [
   {
     role: 'Treasurer',
     name: 'Charmagne Eunice F. Varon',
-    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/300014202D',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/EuniceVaron',
   },
   {
     role: 'Auditor',
     name: 'Karla Marie C. Sebastian',
-    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/EuniceVaron',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/KarlaSebastian',
   },
 ]
 

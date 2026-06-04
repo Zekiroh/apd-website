@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import AboutSection from './components/AboutSection'
 import CommunityCultureSection from './components/CommunityCultureSection'
 import EventsSection from './components/EventsSection'
@@ -15,14 +15,32 @@ import WhatWeDoSection from './components/WhatWeDoSection'
 
 const loaderSessionKey = 'apd-loader-shown'
 
+const getIsTouchDevice = () => {
+  if (typeof window === 'undefined') return false
+
+  return (
+    window.matchMedia('(hover: none), (pointer: coarse)').matches ||
+    navigator.maxTouchPoints > 0
+  )
+}
+
 export default function App() {
+  const touchGlowTimeoutRef = useRef<number | null>(null)
+
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isMouseInside, setIsMouseInside] = useState(false)
+  const [touchGlowVisible, setTouchGlowVisible] = useState(false)
+  const [isTouchDevice] = useState(getIsTouchDevice)
   const [isLoading, setIsLoading] = useState(() => {
     return sessionStorage.getItem(loaderSessionKey) !== 'true'
   })
 
+  const shouldShowMouseGlow = !isTouchDevice && isMouseInside
+  const shouldShowGlow = shouldShowMouseGlow || touchGlowVisible
+
   useEffect(() => {
+    if (isTouchDevice) return
+
     const handleMouseMove = (event: MouseEvent) => {
       setMousePosition({
         x: event.clientX,
@@ -49,7 +67,42 @@ export default function App() {
       document.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('mouseenter', handleMouseEnter)
     }
-  }, [])
+  }, [isTouchDevice])
+
+  useEffect(() => {
+    if (!isTouchDevice) return
+
+    const handleTouchStart = (event: TouchEvent) => {
+      const touch = event.touches[0]
+
+      if (!touch) return
+
+      setMousePosition({
+        x: touch.clientX,
+        y: touch.clientY,
+      })
+
+      setTouchGlowVisible(true)
+
+      if (touchGlowTimeoutRef.current) {
+        window.clearTimeout(touchGlowTimeoutRef.current)
+      }
+
+      touchGlowTimeoutRef.current = window.setTimeout(() => {
+        setTouchGlowVisible(false)
+      }, 750)
+    }
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: true })
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart)
+
+      if (touchGlowTimeoutRef.current) {
+        window.clearTimeout(touchGlowTimeoutRef.current)
+      }
+    }
+  }, [isTouchDevice])
 
   useEffect(() => {
     document.body.style.overflow = isLoading ? 'hidden' : ''
@@ -97,16 +150,16 @@ export default function App() {
           }}
         />
 
-        {/* Mouse Glow */}
+        {/* Pointer Glow */}
         <div
-          className={`pointer-events-none fixed inset-0 z-20 transition-opacity duration-500 ${
-            isMouseInside ? 'opacity-100' : 'opacity-0'
+          className={`pointer-events-none fixed inset-0 z-20 transition-opacity duration-700 ${
+            shouldShowGlow ? 'opacity-100' : 'opacity-0'
           }`}
           style={{
             background: `radial-gradient(
-              650px circle at ${mousePosition.x}px ${mousePosition.y}px,
-              rgba(245, 197, 66, 0.18),
-              transparent 40%
+              360px circle at ${mousePosition.x}px ${mousePosition.y}px,
+              rgba(245, 197, 66, 0.08),
+              transparent 55%
             )`,
           }}
         />
