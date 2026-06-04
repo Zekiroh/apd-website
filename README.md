@@ -2,6 +2,14 @@
 
 [![Live Website](https://img.shields.io/badge/Live%20Website-Visit-gold?style=for-the-badge)](https://apd-website-rho.vercel.app)
 
+## Preview
+
+### APD Terminal Boot
+
+![APD Terminal Boot](./docs/loading-screen-preview.png)
+
+### APD Website
+
 ![APD Website Preview](./docs/website-preview.png)
 
 Official website of the **Assemblage of Programmers and Developers (APD)**, the student technology organization of **FEU Diliman**.
@@ -14,6 +22,7 @@ The website serves as the organization's online presence, showcasing its mission
 
 - Responsive design for desktop and mobile devices
 - Modern black and gold APD branding
+- Interactive APD Terminal boot experience
 - Interactive hero section with developer-inspired visuals
 - Organization overview and mission
 - Projects showcase
@@ -99,7 +108,7 @@ Future improvements include:
 
 ## Organization
 
-Assemblage of Programmers and Developers (APD)
+**Assemblage of Programmers and Developers (APD)**
 
 FEU Diliman
 
