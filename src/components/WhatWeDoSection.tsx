@@ -1,6 +1,22 @@
-import { Laptop } from 'lucide-react'
+import {
+  Code2,
+  Gamepad2,
+  Laptop,
+  Palette,
+  ShieldCheck,
+  Smartphone,
+} from 'lucide-react'
 import { activities } from '../data/landingPageData'
 import Reveal from './Reveal'
+
+const activityIcons = {
+  'Web Development': Laptop,
+  'Mobile Development': Smartphone,
+  'UI/UX Design': Palette,
+  Programming: Code2,
+  Cybersecurity: ShieldCheck,
+  'Game Development': Gamepad2,
+}
 
 export default function WhatWeDoSection() {
   return (
@@ -20,28 +36,34 @@ export default function WhatWeDoSection() {
             </h2>
 
             <p className="mt-6 leading-8 text-white/60">
-              APD helps students practice real-world development through
-              workshops, collaborative projects, coding activities, and
+              APD empowers students across web, mobile, cybersecurity, 
+              software engineering, UI/UX, and game development through 
+              collaborative projects, workshops, competitions, and 
               community-driven learning.
             </p>
           </div>
         </Reveal>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {activities.map((activity, index) => (
-            <Reveal
-              key={activity}
-              delay={0.1 + index * 0.08}
-            >
-              <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/3 p-5 transition hover:border-yellow-300/40 hover:bg-yellow-400/10">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-yellow-300">
-                  <Laptop size={21} />
-                </div>
+          {activities.map((activity, index) => {
+            const ActivityIcon =
+              activityIcons[activity as keyof typeof activityIcons] ?? Laptop
 
-                <span className="font-semibold">{activity}</span>
-              </div>
-            </Reveal>
-          ))}
+            return (
+              <Reveal
+                key={activity}
+                delay={0.1 + index * 0.08}
+              >
+                <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/3 p-5 transition hover:border-yellow-300/40 hover:bg-yellow-400/10">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-yellow-300">
+                    <ActivityIcon size={21} />
+                  </div>
+
+                  <span className="font-semibold">{activity}</span>
+                </div>
+              </Reveal>
+            )
+          })}
         </div>
       </div>
     </section>

@@ -1,4 +1,11 @@
-import { Code2, Globe2, Layers3, Rocket, Trophy, Users } from 'lucide-react'
+import {
+  Code2,
+  Globe2,
+  QrCode,
+  Rocket,
+  Smartphone,
+  Users,
+} from 'lucide-react'
 
 export const highlights = [
   {
@@ -22,11 +29,11 @@ export const highlights = [
 
 export const activities = [
   'Web Development',
-  'Mobile Apps',
-  'UI/UX Design',
+  'Mobile Development',
   'Programming',
-  'Tech Workshops',
-  'Student Projects',
+  'UI/UX Design',
+  'Cybersecurity',
+  'Game Development',
 ]
 
 export const featuredProjects = [
@@ -34,77 +41,99 @@ export const featuredProjects = [
     icon: Globe2,
     title: 'APD Website',
     description:
-      'The official public website of APD built to represent the organization and its initiatives.',
-    status: 'In Progress',
+      'The official public website of APD built to showcase the organization, its members, projects, events, and initiatives.',
+    status: 'Live',
+    repositoryUrl: 'https://github.com/Zekiroh/apd-website',
   },
   {
-    icon: Layers3,
-    title: 'APD Event Attendance System',
+    icon: QrCode,
+    title: 'APD Attendance System',
     description:
-      'A QR-powered attendance tracking system designed to streamline APD event registration, attendance monitoring, and participation records.',
+      'A QR-powered attendance tracking system designed to streamline event check-ins, participation monitoring, and attendance records for APD activities.',
     status: 'In Progress',
+    repositoryUrl: 'https://github.com/Zekiroh/apd-attendance-system',
   },
   {
-    icon: Trophy,
-    title: 'Technical Workshops & Bootcamps',
+    icon: Smartphone,
+    title: 'APD Connect',
     description:
-      'Hands-on workshops, coding bootcamps, and learning sessions focused on web development, programming, UI/UX, and emerging technologies.',
+      'A centralized platform for APD members featuring attendance tracking, events, community engagement, member profiles, and future developer growth initiatives.',
     status: 'Coming Soon',
+    repositoryUrl: '',
   },
 ]
 
 export const adviser = {
   role: 'APD Adviser',
   name: 'Tim Jamison S. Awat',
+  profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/timawat016',
 }
 
 export const executiveBoard = [
   {
     role: 'President',
     name: 'John Paul Osias',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/663019102D',
   },
   {
-    role: 'Vice President Internal (VPI)',
+    role: 'Vice President Internal',
     name: 'Giulia Margaux Villanueva',
+    badge: 'VPI',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/491013202D',
   },
   {
-    role: 'Vice President External (VPE)',
+    role: 'Vice President External',
     name: 'Gabriel L. Saavedra',
+    badge: 'VPE',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/312014202D',
   },
   {
     role: 'Secretary',
     name: 'Reneanne Claire O. Guilas',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/Guilas',
   },
   {
-    role: 'Public Information Officer (PIO)',
+    role: 'Public Information Officer',
     name: 'Angela Michaela P. Pizarra',
+    badge: 'PIO',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/300014202D',
   },
   {
     role: 'Treasurer',
     name: 'Charmagne Eunice F. Varon',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/300014202D',
   },
   {
     role: 'Auditor',
     name: 'Karla Marie C. Sebastian',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/EuniceVaron',
   },
 ]
 
 export const committeeHeads = [
   {
-    role: 'Committee of Codes and Languages (CCL)',
+    role: 'Committee of Codes and Languages',
     name: 'Jherald Brylle P. Villafuerte',
+    badge: 'CCL',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/663019102D',
   },
   {
-    role: 'Documentation and Media Coverage (DMC)',
+    role: 'Documentation and Media Coverage',
     name: 'Benedict P. Navarro',
+    badge: 'DMC',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/bpnavarro',
   },
   {
-    role: 'LogITech (LIT)',
+    role: 'LogITech',
     name: 'Richmond A. Mones',
+    badge: 'LIT',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/ramones',
   },
   {
-    role: 'Secretariat and Programs Committee (SPC)',
+    role: 'Secretariat and Programs Committee',
     name: 'Maria Luisa Florendo',
+    badge: 'SPC',
+    profileUrl: 'https://paraverse.feutech.edu.ph/briefcase/profile/821010202D',
   },
 ]
 

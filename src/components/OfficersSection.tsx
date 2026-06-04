@@ -1,10 +1,12 @@
-import { GraduationCap, UserRound } from 'lucide-react'
+import { ArrowUpRight, GraduationCap, UserRound } from 'lucide-react'
 import { adviser, committeeHeads, executiveBoard } from '../data/landingPageData'
 import Reveal from './Reveal'
 
 type Officer = {
   role: string
   name: string
+  badge?: string
+  profileUrl?: string
 }
 
 type OfficerGroupProps = {
@@ -32,28 +34,54 @@ function OfficerGroup({
         </div>
       </Reveal>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="flex flex-wrap justify-center gap-5">
         {officers.map((officer, index) => (
-          <Reveal
+          <div
             key={officer.role}
-            delay={delayStart + 0.1 + index * 0.06}
+            className="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(25%-0.9375rem)]"
           >
-            <div className="flex h-full min-h-62.5 flex-col rounded-3xl border border-white/10 bg-white/3 p-6 text-center transition hover:-translate-y-2 hover:border-yellow-300/40 hover:bg-white/6">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl border border-yellow-300/20 bg-yellow-400/10 text-yellow-300">
-                <UserRound size={34} />
-              </div>
+            <Reveal delay={delayStart + 0.1 + index * 0.06}>
+              <a
+                href={officer.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block h-full rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              >
+                <div className="flex h-80 flex-col rounded-3xl border border-white/10 bg-white/3 p-6 text-center transition group-hover:-translate-y-2 group-hover:border-yellow-300/40 group-hover:bg-white/6">
+                  <div className="mx-auto flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl border border-yellow-300/20 bg-yellow-400/10 text-yellow-300">
+                    <UserRound size={34} />
+                  </div>
 
-              <div className="mt-6 flex flex-1 flex-col justify-center">
-                <h4 className="text-lg font-bold leading-snug">
-                  {officer.role}
-                </h4>
+                  <div className="mt-6 flex flex-1 flex-col">
+                    <div className="flex flex-1 items-center justify-center">
+                      <h4 className="text-lg font-bold leading-snug">
+                        {officer.role}
+                      </h4>
+                    </div>
 
-                <p className="mt-3 text-sm leading-6 text-white/50">
-                  {officer.name}
-                </p>
-              </div>
-            </div>
-          </Reveal>
+                    <div className="mt-4 min-h-13">
+                      <div className="flex flex-wrap items-center justify-center gap-2">
+                        <p className="text-sm leading-6 text-white/50 transition group-hover:text-white/70">
+                          {officer.name}
+                        </p>
+
+                        {officer.badge && (
+                          <span className="rounded-full border border-yellow-300/30 bg-yellow-400/10 px-2 py-0.5 text-[10px] font-bold tracking-wide text-yellow-300">
+                            {officer.badge}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <span className="mt-4 inline-flex items-center justify-center gap-1 text-xs font-semibold text-yellow-300/75 transition group-hover:text-yellow-300">
+                      View Profile
+                      <ArrowUpRight size={13} />
+                    </span>
+                  </div>
+                </div>
+              </a>
+            </Reveal>
+          </div>
         ))}
       </div>
     </div>
@@ -98,9 +126,15 @@ export default function OfficersSection() {
                     Adviser
                   </p>
 
-                  <h3 className="mt-2 text-2xl font-black">
+                  <a
+                    href={adviser.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-2 text-2xl font-black outline-none transition hover:text-yellow-300 focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                  >
                     {adviser.name}
-                  </h3>
+                    <ArrowUpRight size={18} />
+                  </a>
 
                   <p className="mt-1 text-white/55">{adviser.role}</p>
                 </div>

@@ -59,6 +59,19 @@ export default function Navbar() {
     setIsMenuOpen(false)
   }
 
+  const handleMobileNavigation = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+
+    setIsMenuOpen(false)
+
+    window.setTimeout(() => {
+      element?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }, 100)
+  }
+
   return (
     <motion.nav
       aria-label="Main navigation"
@@ -163,7 +176,10 @@ export default function Navbar() {
                     aria-current={
                       activeSection === section.id ? 'page' : undefined
                     }
-                    onClick={closeMenu}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      handleMobileNavigation(section.id)
+                    }}
                     className={`rounded-xl px-4 py-3 text-sm font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
                       activeSection === section.id
                         ? 'bg-yellow-400/10 text-yellow-300'

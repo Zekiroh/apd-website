@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
 import {
   ArrowRight,
   Braces,
@@ -7,7 +7,7 @@ import {
   Sparkles,
   Terminal,
 } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 type CodeToken = {
   text: string
@@ -52,13 +52,20 @@ const codeRows: CodeToken[][] = [
     { text: '(', className: 'text-white' },
     { text: 'APD', className: 'text-yellow-300' },
     { text: ', ', className: 'text-white' },
-    { text: 'FEUDiliman', className: 'text-orange-400' },
+    { text: 'FEU-Diliman', className: 'text-orange-400' },
     { text: ');', className: 'text-white' },
   ],
 ]
 
 export default function HeroSection() {
   const shouldReduceMotion = useReducedMotion()
+  const codeBlockRef = useRef<HTMLDivElement | null>(null)
+  const isCodeVisible = useInView(codeBlockRef, {
+    once: true,
+    amount: 0.75,
+    margin: '0px 0px -25% 0px',
+  })
+
   const [typedLength, setTypedLength] = useState(0)
 
   const totalCodeLength = useMemo(() => {
@@ -68,7 +75,7 @@ export default function HeroSection() {
   }, [])
 
   useEffect(() => {
-    if (shouldReduceMotion) return
+    if (shouldReduceMotion || !isCodeVisible) return
 
     const interval = window.setInterval(() => {
       setTypedLength((currentLength) => {
@@ -84,7 +91,7 @@ export default function HeroSection() {
     return () => {
       window.clearInterval(interval)
     }
-  }, [shouldReduceMotion, totalCodeLength])
+  }, [isCodeVisible, shouldReduceMotion, totalCodeLength])
 
   const renderTypedCode = () => {
     const visibleCodeLength = shouldReduceMotion ? totalCodeLength : typedLength
@@ -173,9 +180,26 @@ export default function HeroSection() {
           className="max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl"
         >
           Assemblage of{' '}
-          <span className="bg-linear-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
+          <motion.span
+            animate={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    backgroundPosition: ['0% center', '250% center'],
+                  }
+            }
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+            className="bg-linear-to-r from-yellow-300 via-amber-300 to-yellow-500 bg-clip-text text-transparent"
+            style={{
+              backgroundSize: '250% auto',
+            }}
+          >
             Programmers
-          </span>{' '}
+          </motion.span>{' '}
           and Developers
         </motion.h2>
 
@@ -232,38 +256,41 @@ export default function HeroSection() {
         <motion.div
           animate={shouldReduceMotion ? undefined : { y: [0, -10, 0] }}
           transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -left-10 top-10 z-20 hidden h-12 w-12 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md xl:flex"
+          className="absolute -left-3 top-8 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:-left-6 sm:h-10 sm:w-10 xl:-left-10 xl:h-12 xl:w-12"
         >
-          <Code2 size={22} />
+          <Code2 className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.div>
 
         <motion.div
           animate={shouldReduceMotion ? undefined : { y: [0, 9, 0] }}
           transition={{ duration: 6.8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute right-10 -top-6 z-20 hidden h-11 w-11 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md xl:flex"
+          className="absolute right-6 -top-4 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:right-10 sm:h-10 sm:w-10 xl:-top-6 xl:h-11 xl:w-11"
         >
-          <Braces size={20} />
+          <Braces className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.div>
 
         <motion.div
           animate={shouldReduceMotion ? undefined : { y: [0, 12, 0] }}
           transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -right-8 top-28 z-20 hidden h-11 w-11 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md xl:flex"
+          className="absolute -right-2 top-24 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:-right-4 sm:h-10 sm:w-10 xl:-right-8 xl:top-28 xl:h-11 xl:w-11"
         >
-          <Terminal size={20} />
+          <Terminal className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.div>
 
         <motion.div
           animate={shouldReduceMotion ? undefined : { y: [0, -8, 0] }}
           transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -bottom-4 left-12 z-20 hidden h-10 w-10 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md xl:flex"
+          className="absolute -bottom-4 left-10 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:left-12 sm:h-10 sm:w-10"
         >
-          <Cpu size={19} />
+          <Cpu className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.div>
 
         <div className="absolute inset-0 rounded-4xl bg-yellow-400/15 blur-3xl" />
 
-        <div className="relative z-10 animate-float rounded-4xl border border-yellow-300/20 bg-white/6 p-5 shadow-2xl shadow-yellow-500/10 backdrop-blur-xl">
+        <div
+          ref={codeBlockRef}
+          className="relative z-10 animate-float rounded-4xl border border-yellow-300/20 bg-white/6 p-5 shadow-2xl shadow-yellow-500/10 backdrop-blur-xl"
+        >
           <div className="rounded-3xl border border-white/10 bg-black/40 p-5">
             <div className="mb-5 flex gap-2">
               <span className="h-3 w-3 rounded-full bg-red-400" />

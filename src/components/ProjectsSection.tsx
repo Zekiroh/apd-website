@@ -1,3 +1,4 @@
+import { ArrowUpRight } from 'lucide-react'
 import { featuredProjects } from '../data/landingPageData'
 import Reveal from './Reveal'
 
@@ -33,7 +34,7 @@ export default function ProjectsSection() {
               key={project.title}
               delay={0.1 + index * 0.1}
             >
-              <div className="group h-full rounded-3xl border border-white/10 bg-white/3 p-7 transition hover:-translate-y-2 hover:border-yellow-300/40 hover:bg-yellow-400/10">
+              <div className="group flex h-full flex-col rounded-3xl border border-white/10 bg-white/3 p-7 transition hover:-translate-y-2 hover:border-yellow-300/40 hover:bg-yellow-400/10">
                 <div className="mb-8 flex items-start justify-between gap-4">
                   <div className="flex h-13 w-13 items-center justify-center rounded-2xl bg-yellow-400/10 text-yellow-300">
                     <project.icon size={28} />
@@ -46,9 +47,25 @@ export default function ProjectsSection() {
 
                 <h3 className="text-2xl font-bold">{project.title}</h3>
 
-                <p className="mt-3 leading-7 text-white/60">
+                <p className="mt-3 flex-1 leading-7 text-white/60">
                   {project.description}
                 </p>
+
+                {project.repositoryUrl ? (
+                  <a
+                    href={project.repositoryUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-yellow-300 transition hover:text-yellow-200"
+                  >
+                    View Repository
+                    <ArrowUpRight size={16} />
+                  </a>
+                ) : (
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white/30">
+                    Repository Coming Soon
+                  </span>
+                )}
               </div>
             </Reveal>
           ))}
