@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type LoadingScreenProps = {
   onComplete: () => void
@@ -11,25 +11,62 @@ const bootLines = [
   'Connecting developers...',
 ]
 
+const launchCommand = 'npm run apd'
+
 export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const shouldReduceMotion = useReducedMotion()
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  const [command, setCommand] = useState('')
+  const [hasStarted, setHasStarted] = useState(false)
+  const [hasError, setHasError] = useState(false)
   const [visibleLineCount, setVisibleLineCount] = useState(0)
 
   const [readyTime] = useState(() =>
     (Math.random() * (1.2 - 0.6) + 0.6).toFixed(1),
   )
 
+  const startBootSequence = () => {
+    setCommand(launchCommand)
+    setHasError(false)
+    setHasStarted(true)
+  }
+
+  const handleSubmit = () => {
+    if (hasStarted) return
+
+    if (command.trim().toLowerCase() === launchCommand) {
+      startBootSequence()
+      return
+    }
+
+    setHasError(true)
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSubmit()
+    }
+  }
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
+
   useEffect(() => {
     if (shouldReduceMotion) {
       const timeout = window.setTimeout(() => {
-        setVisibleLineCount(bootLines.length + 2)
         onComplete()
-      }, 50)
+      }, 100)
 
       return () => {
         window.clearTimeout(timeout)
       }
     }
+  }, [onComplete, shouldReduceMotion])
+
+  useEffect(() => {
+    if (!hasStarted || shouldReduceMotion) return
 
     const lineInterval = window.setInterval(() => {
       setVisibleLineCount((currentCount) => {
@@ -50,7 +87,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       window.clearInterval(lineInterval)
       window.clearTimeout(completeTimeout)
     }
-  }, [onComplete, shouldReduceMotion])
+  }, [hasStarted, onComplete, shouldReduceMotion])
 
   return (
     <motion.div
@@ -58,6 +95,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className="fixed inset-0 z-9999 flex items-center justify-center bg-[#050607] px-6 text-white"
+      onClick={() => inputRef.current?.focus()}
     >
       <div className="pointer-events-none absolute inset-0 opacity-[0.035]">
         <div
@@ -110,15 +148,86 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
         </div>
 
         <div className="min-h-56 space-y-3 font-mono text-sm leading-7 text-white/75 sm:text-base">
-          <p>
-            <span className="text-yellow-300">&gt;</span>{' '}
-            <span className="text-white">npm run apd</span>
-          </p>
+          {!hasStarted && (
+            <>
+              <p className="text-white/50">Type the command to launch APD.</p>
 
-          <div className="pt-2">
-            {bootLines.map((line, index) => (
+              <div className="flex items-center gap-2">
+                <span className="text-yellow-300">&gt;</span>
+
+                <input
+                  ref={inputRef}
+                  value={command}
+                  onChange={(event) => {
+                    setCommand(event.target.value)
+                    setHasError(false)
+                  }}
+                  onKeyDown={handleKeyDown}
+                  className="w-full bg-transparent text-white caret-yellow-300 outline-none placeholder:text-white/25"
+                  placeholder="npm run apd"
+                  autoComplete="off"
+                  spellCheck={false}
+                />
+              </div>
+
+              {hasError && (
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-red-300"
+                >
+                  Command not recognized. Try: npm run apd
+                </motion.p>
+              )}
+
+              <p className="pt-4 text-xs leading-6 text-white/35 sm:text-sm">
+                Type "npm run apd" and press Enter to continue.
+              </p>
+
+              <div className="pt-3">
+                <button
+                  type="button"
+                  onClick={onComplete}
+                  className="text-xs uppercase tracking-wider text-yellow-300 transition hover:text-yellow-200"
+                >
+                  Skip Boot →
+                </button>
+              </div>
+            </>
+          )}
+
+          {hasStarted && (
+            <>
+              <p>
+                <span className="text-yellow-300">&gt;</span>{' '}
+                <span className="text-white">{launchCommand}</span>
+              </p>
+
+              <div className="pt-2">
+                {bootLines.map((line, index) => (
+                  <motion.p
+                    key={line}
+                    initial={
+                      shouldReduceMotion
+                        ? false
+                        : {
+                            opacity: 0,
+                            x: -8,
+                          }
+                    }
+                    animate={{
+                      opacity: visibleLineCount > index ? 1 : 0,
+                      x: visibleLineCount > index ? 0 : -8,
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="text-white/60"
+                  >
+                    {line}
+                  </motion.p>
+                ))}
+              </div>
+
               <motion.p
-                key={line}
                 initial={
                   shouldReduceMotion
                     ? false
@@ -128,55 +237,36 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                       }
                 }
                 animate={{
-                  opacity: visibleLineCount > index ? 1 : 0,
-                  x: visibleLineCount > index ? 0 : -8,
+                  opacity: visibleLineCount > bootLines.length ? 1 : 0,
+                  x: visibleLineCount > bootLines.length ? 0 : -8,
                 }}
                 transition={{ duration: 0.3 }}
-                className="text-white/60"
+                className="pt-2 text-emerald-300"
               >
-                {line}
+                ✓ Ready in {readyTime}s
               </motion.p>
-            ))}
-          </div>
 
-          <motion.p
-            initial={
-              shouldReduceMotion
-                ? false
-                : {
-                    opacity: 0,
-                    x: -8,
-                  }
-            }
-            animate={{
-              opacity: visibleLineCount > bootLines.length ? 1 : 0,
-              x: visibleLineCount > bootLines.length ? 0 : -8,
-            }}
-            transition={{ duration: 0.3 }}
-            className="pt-2 text-emerald-300"
-          >
-            ✓ Ready in {readyTime}s
-          </motion.p>
-
-          <motion.p
-            initial={
-              shouldReduceMotion
-                ? false
-                : {
-                    opacity: 0,
-                    x: -8,
-                  }
-            }
-            animate={{
-              opacity: visibleLineCount > bootLines.length + 1 ? 1 : 0,
-              x: visibleLineCount > bootLines.length + 1 ? 0 : -8,
-            }}
-            transition={{ duration: 0.3 }}
-            className="text-yellow-300"
-          >
-            launch(APD);
-            <span className="ml-1 animate-pulse">▍</span>
-          </motion.p>
+              <motion.p
+                initial={
+                  shouldReduceMotion
+                    ? false
+                    : {
+                        opacity: 0,
+                        x: -8,
+                      }
+                }
+                animate={{
+                  opacity: visibleLineCount > bootLines.length + 1 ? 1 : 0,
+                  x: visibleLineCount > bootLines.length + 1 ? 0 : -8,
+                }}
+                transition={{ duration: 0.3 }}
+                className="text-yellow-300"
+              >
+                launch(APD);
+                <span className="ml-1 animate-pulse">▍</span>
+              </motion.p>
+            </>
+          )}
         </div>
       </motion.div>
     </motion.div>
