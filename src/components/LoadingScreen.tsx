@@ -49,6 +49,19 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     }
   }
 
+  const getBootLineClassName = (isVisible: boolean, className = '') => {
+    const baseClassName =
+      'transition-[opacity,transform] duration-300 ease-out will-change-auto'
+
+    if (shouldReduceMotion) {
+      return `${baseClassName} translate-x-0 opacity-100 ${className}`.trim()
+    }
+
+    return `${baseClassName} ${
+      isVisible ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-0'
+    } ${className}`.trim()
+  }
+
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
@@ -111,7 +124,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       </div>
 
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/15 blur-3xl" />
+        <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/15 blur-2xl md:blur-3xl" />
       </div>
 
       <motion.div
@@ -133,7 +146,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           duration: 0.5,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="relative w-full max-w-xl rounded-3xl border border-yellow-300/20 bg-black/60 p-5 shadow-2xl shadow-yellow-500/10 backdrop-blur-xl sm:p-6"
+        className="relative w-full max-w-xl rounded-3xl border border-yellow-300/20 bg-black/60 p-5 shadow-2xl shadow-yellow-500/10 backdrop-blur-md sm:p-6 md:backdrop-blur-xl"
       >
         <div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex gap-2">
@@ -171,13 +184,9 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
               </div>
 
               {hasError && (
-                <motion.p
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-red-300"
-                >
+                <p className="translate-y-0 text-red-300 opacity-100 transition-[opacity,transform] duration-300 ease-out">
                   Command not recognized. Try: npm run apd
-                </motion.p>
+                </p>
               )}
 
               <p className="pt-4 text-xs leading-6 text-white/35 sm:text-sm">
@@ -205,66 +214,36 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
               <div className="pt-2">
                 {bootLines.map((line, index) => (
-                  <motion.p
+                  <p
                     key={line}
-                    initial={
-                      shouldReduceMotion
-                        ? false
-                        : {
-                            opacity: 0,
-                            x: -8,
-                          }
-                    }
-                    animate={{
-                      opacity: visibleLineCount > index ? 1 : 0,
-                      x: visibleLineCount > index ? 0 : -8,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="text-white/60"
+                    className={getBootLineClassName(
+                      visibleLineCount > index,
+                      'text-white/60',
+                    )}
                   >
                     {line}
-                  </motion.p>
+                  </p>
                 ))}
               </div>
 
-              <motion.p
-                initial={
-                  shouldReduceMotion
-                    ? false
-                    : {
-                        opacity: 0,
-                        x: -8,
-                      }
-                }
-                animate={{
-                  opacity: visibleLineCount > bootLines.length ? 1 : 0,
-                  x: visibleLineCount > bootLines.length ? 0 : -8,
-                }}
-                transition={{ duration: 0.3 }}
-                className="pt-2 text-emerald-300"
+              <p
+                className={getBootLineClassName(
+                  visibleLineCount > bootLines.length,
+                  'pt-2 text-emerald-300',
+                )}
               >
                 ✓ Ready in {readyTime}s
-              </motion.p>
+              </p>
 
-              <motion.p
-                initial={
-                  shouldReduceMotion
-                    ? false
-                    : {
-                        opacity: 0,
-                        x: -8,
-                      }
-                }
-                animate={{
-                  opacity: visibleLineCount > bootLines.length + 1 ? 1 : 0,
-                  x: visibleLineCount > bootLines.length + 1 ? 0 : -8,
-                }}
-                transition={{ duration: 0.3 }}
-                className="text-yellow-300"
+              <p
+                className={getBootLineClassName(
+                  visibleLineCount > bootLines.length + 1,
+                  'text-yellow-300',
+                )}
               >
                 launch(APD);
-                <span className="ml-1 animate-pulse">▍</span>
-              </motion.p>
+                <span className="ml-1 motion-safe:animate-pulse">▍</span>
+              </p>
             </>
           )}
         </div>

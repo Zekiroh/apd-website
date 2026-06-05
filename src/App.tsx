@@ -15,6 +15,12 @@ import WhatWeDoSection from './components/WhatWeDoSection'
 
 const loaderSessionKey = 'apd-loader-shown'
 
+const getShouldShowLoader = () => {
+  if (typeof window === 'undefined') return false
+
+  return sessionStorage.getItem(loaderSessionKey) !== 'true'
+}
+
 const getIsTouchDevice = () => {
   if (typeof window === 'undefined') return false
 
@@ -31,15 +37,14 @@ export default function App() {
   const [isMouseInside, setIsMouseInside] = useState(false)
   const [touchGlowVisible, setTouchGlowVisible] = useState(false)
   const [isTouchDevice] = useState(getIsTouchDevice)
-  const [isLoading, setIsLoading] = useState(() => {
-    return sessionStorage.getItem(loaderSessionKey) !== 'true'
-  })
+  const [isLoading, setIsLoading] = useState(getShouldShowLoader)
+  const [isContentReady, setIsContentReady] = useState(() => !getShouldShowLoader())
 
   const shouldShowMouseGlow = !isTouchDevice && isMouseInside
   const shouldShowGlow = shouldShowMouseGlow || touchGlowVisible
 
   useEffect(() => {
-    if (isTouchDevice) return
+    if (!isContentReady || isTouchDevice) return
 
     const handleMouseMove = (event: MouseEvent) => {
       setMousePosition({
@@ -67,10 +72,10 @@ export default function App() {
       document.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('mouseenter', handleMouseEnter)
     }
-  }, [isTouchDevice])
+  }, [isContentReady, isTouchDevice])
 
   useEffect(() => {
-    if (!isTouchDevice) return
+    if (!isContentReady || !isTouchDevice) return
 
     const handleTouchStart = (event: TouchEvent) => {
       const touch = event.touches[0]
@@ -102,7 +107,7 @@ export default function App() {
         window.clearTimeout(touchGlowTimeoutRef.current)
       }
     }
-  }, [isTouchDevice])
+  }, [isContentReady, isTouchDevice])
 
   useEffect(() => {
     document.body.style.overflow = isLoading ? 'hidden' : ''
@@ -119,74 +124,80 @@ export default function App() {
 
   return (
     <>
-      <AnimatePresence>
+      <AnimatePresence
+        onExitComplete={() => {
+          setIsContentReady(true)
+        }}
+      >
         {isLoading && <LoadingScreen onComplete={completeLoading} />}
       </AnimatePresence>
 
-      <main className="relative min-h-screen overflow-hidden bg-[#050607] text-white">
-        {/* Global Tech Grid */}
-        <div
-          className="pointer-events-none fixed inset-0 z-0 opacity-[0.025]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
-          }}
-        />
+      {isContentReady && (
+        <main className="relative min-h-screen overflow-hidden bg-[#050607] text-white">
+          {/* Global Tech Grid */}
+          <div
+            className="pointer-events-none fixed inset-0 z-0 opacity-[0.025]"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)
+              `,
+              backgroundSize: '40px 40px',
+            }}
+          />
 
-        {/* Global Golden Beam */}
-        <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-          <div className="absolute -right-62.5 -top-25 h-550 w-125 rotate-12 bg-yellow-400/[0.035] blur-[180px]" />
-        </div>
-
-        {/* Global Vignette */}
-        <div
-          className="pointer-events-none fixed inset-0 z-0"
-          style={{
-            background:
-              'radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.55) 100%)',
-          }}
-        />
-
-        {/* Pointer Glow */}
-        <div
-          className={`pointer-events-none fixed inset-0 z-20 transition-opacity duration-700 ${
-            shouldShowGlow ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{
-            background: `radial-gradient(
-              360px circle at ${mousePosition.x}px ${mousePosition.y}px,
-              rgba(245, 197, 66, 0.08),
-              transparent 55%
-            )`,
-          }}
-        />
-
-        <section className="relative min-h-screen px-6 py-6">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -left-40 top-20 h-96 w-96 animate-pulse-glow rounded-full bg-yellow-400/20 blur-3xl" />
-
-            <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
-
-            <div className="absolute left-1/2 top-1/2 h-175 w-175 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-200/5 blur-[180px]" />
+          {/* Global Golden Beam */}
+          <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+            <div className="absolute -right-62.5 -top-25 h-550 w-125 rotate-12 bg-yellow-400/[0.035] blur-[180px]" />
           </div>
 
-          <Navbar />
-          <HeroSection isPageReady={!isLoading} />
-        </section>
+          {/* Global Vignette */}
+          <div
+            className="pointer-events-none fixed inset-0 z-0"
+            style={{
+              background:
+                'radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.55) 100%)',
+            }}
+          />
 
-        <AboutSection />
-        <WhatWeDoSection />
-        <CommunityCultureSection />
-        <ProjectsSection />
-        <OfficersSection />
-        <EventsSection />
-        <RecognitionSection />
-        <Footer />
-        <ScrollToTopButton />
-      </main>
+          {/* Pointer Glow */}
+          <div
+            className={`pointer-events-none fixed inset-0 z-20 transition-opacity duration-700 ${
+              shouldShowGlow ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{
+              background: `radial-gradient(
+                360px circle at ${mousePosition.x}px ${mousePosition.y}px,
+                rgba(245, 197, 66, 0.08),
+                transparent 55%
+              )`,
+            }}
+          />
+
+          <section className="relative min-h-screen px-6 py-6">
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute -left-40 top-20 h-96 w-96 animate-pulse-glow rounded-full bg-yellow-400/20 blur-3xl" />
+
+              <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
+
+              <div className="absolute left-1/2 top-1/2 h-175 w-175 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-200/5 blur-[180px]" />
+            </div>
+
+            <Navbar />
+            <HeroSection isPageReady={isContentReady} />
+          </section>
+
+          <AboutSection />
+          <WhatWeDoSection />
+          <CommunityCultureSection />
+          <ProjectsSection />
+          <OfficersSection />
+          <EventsSection />
+          <RecognitionSection />
+          <Footer />
+          <ScrollToTopButton />
+        </main>
+      )}
     </>
   )
 }
