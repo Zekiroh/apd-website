@@ -171,7 +171,7 @@ export default function HeroSection({ isPageReady }: HeroSectionProps) {
   }
 
   return (
-    <div className="relative z-10 mx-auto grid min-h-[calc(100vh-160px)] max-w-7xl items-center gap-14 py-16 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="relative z-10 mx-auto grid min-h-[calc(100vh-160px)] max-w-7xl items-center gap-14 pt-32 pb-16 sm:pt-36 lg:grid-cols-[1.1fr_0.9fr] lg:pt-16">
       <motion.div
         initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
         animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -277,51 +277,51 @@ export default function HeroSection({ isPageReady }: HeroSectionProps) {
       >
         <motion.div
           animate={
-            shouldAnimate && !shouldReduceMotion ? { y: [0, -4, 0] } : undefined
+            shouldAnimate && !shouldReduceMotion ? { y: [0, -10, 0] } : undefined
           }
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -left-3 top-8 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/80 text-yellow-300 shadow-lg shadow-yellow-500/15 sm:-left-6 sm:h-10 sm:w-10 xl:-left-10 xl:h-12 xl:w-12"
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -left-3 top-8 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:-left-6 sm:h-10 sm:w-10 xl:-left-10 xl:h-12 xl:w-12"
         >
           <Code2 className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.div>
 
         <motion.div
           animate={
-            shouldAnimate && !shouldReduceMotion ? { y: [0, 4, 0] } : undefined
+            shouldAnimate && !shouldReduceMotion ? { y: [0, 9, 0] } : undefined
           }
-          transition={{ duration: 7.4, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute right-6 -top-4 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/80 text-yellow-300 shadow-lg shadow-yellow-500/15 sm:right-10 sm:h-10 sm:w-10 xl:-top-6 xl:h-11 xl:w-11"
+          transition={{ duration: 6.8, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute right-6 -top-4 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:right-10 sm:h-10 sm:w-10 xl:-top-6 xl:h-11 xl:w-11"
         >
           <Braces className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.div>
 
         <motion.div
           animate={
-            shouldAnimate && !shouldReduceMotion ? { y: [0, 5, 0] } : undefined
+            shouldAnimate && !shouldReduceMotion ? { y: [0, 12, 0] } : undefined
           }
-          transition={{ duration: 7.8, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -right-2 top-24 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/80 text-yellow-300 shadow-lg shadow-yellow-500/15 sm:-right-4 sm:h-10 sm:w-10 xl:-right-8 xl:top-28 xl:h-11 xl:w-11"
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -right-2 top-24 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:-right-4 sm:h-10 sm:w-10 xl:-right-8 xl:top-28 xl:h-11 xl:w-11"
         >
           <Terminal className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.div>
 
         <motion.div
           animate={
-            shouldAnimate && !shouldReduceMotion ? { y: [0, -4, 0] } : undefined
+            shouldAnimate && !shouldReduceMotion ? { y: [0, -8, 0] } : undefined
           }
-          transition={{ duration: 7.2, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -bottom-4 left-10 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/80 text-yellow-300 shadow-lg shadow-yellow-500/15 sm:left-12 sm:h-10 sm:w-10"
+          transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute -bottom-4 left-10 z-20 flex h-9 w-9 items-center justify-center rounded-2xl border border-yellow-300/25 bg-black/60 text-yellow-300 shadow-lg shadow-yellow-500/20 backdrop-blur-md sm:left-12 sm:h-10 sm:w-10"
         >
           <Cpu className="h-4 w-4 sm:h-5 sm:w-5" />
         </motion.div>
 
-        <div className="absolute inset-0 rounded-4xl bg-yellow-400/12 blur-xl" />
+        <div className="absolute inset-0 rounded-4xl bg-yellow-400/15 blur-3xl" />
 
         <div
           ref={codeBlockRef}
-          className="relative z-10 animate-float rounded-4xl border border-yellow-300/20 bg-[#1e1e1e]/90 p-5 shadow-2xl shadow-yellow-500/10"
+          className="relative z-10 animate-float rounded-4xl border border-yellow-300/20 bg-white/6 p-5 shadow-2xl shadow-yellow-500/10 backdrop-blur-xl"
         >
-          <div className="rounded-3xl border border-white/10 bg-[#252526] p-5">
+          <div className="rounded-3xl border border-white/10 bg-black/40 p-5">
             <div className="mb-5 flex gap-2">
               <span className="h-3 w-3 rounded-full bg-red-400" />
               <span className="h-3 w-3 rounded-full bg-yellow-400" />
