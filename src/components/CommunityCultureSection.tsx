@@ -173,7 +173,7 @@ export default function CommunityCultureSection() {
                 </div>
               </div>
 
-              <div className="relative min-h-80 overflow-hidden bg-black lg:min-h-72">
+              <div className="relative min-h-108 overflow-hidden bg-black sm:min-h-116 lg:min-h-72">
                 <video
                   key={activeStory.videoSrc}
                   src={activeStory.videoSrc}
@@ -185,10 +185,10 @@ export default function CommunityCultureSection() {
                   className="absolute inset-0 h-full w-full object-cover opacity-55 transition duration-700 hover:scale-105 hover:opacity-70"
                 />
 
-                <div className="absolute inset-0 bg-linear-to-t from-black via-black/55 to-black/20" />
-                <div className="absolute inset-0 bg-linear-to-r from-black/40 via-transparent to-black/20" />
+                <div className="absolute inset-0 bg-linear-to-t from-black via-black/75 to-black/45" />
+                <div className="absolute inset-0 bg-linear-to-r from-black/50 via-black/10 to-black/30" />
 
-                <div className="relative flex h-full min-h-80 flex-col justify-end p-8 sm:p-10 lg:min-h-72">
+                <div className="relative flex h-full min-h-108 flex-col p-8 sm:min-h-116 sm:p-10 lg:min-h-72">
                   <p className="text-sm font-semibold uppercase tracking-[0.25em] text-yellow-300">
                     {activeStory.eyebrow}
                   </p>
@@ -201,7 +201,7 @@ export default function CommunityCultureSection() {
                     {activeStory.description}
                   </p>
 
-                  <div className="mt-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="mt-auto flex flex-col gap-5 pt-7 sm:flex-row sm:items-center sm:justify-between">
                     <button
                       type="button"
                       onClick={openActiveStory}
