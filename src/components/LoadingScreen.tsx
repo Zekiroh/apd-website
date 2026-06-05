@@ -17,7 +17,6 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const shouldReduceMotion = useReducedMotion()
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const [command, setCommand] = useState('')
   const [hasStarted, setHasStarted] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [visibleLineCount, setVisibleLineCount] = useState(0)
@@ -27,7 +26,10 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   )
 
   const startBootSequence = () => {
-    setCommand(launchCommand)
+    if (inputRef.current) {
+      inputRef.current.value = launchCommand
+    }
+
     setHasError(false)
     setHasStarted(true)
   }
@@ -35,7 +37,9 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const handleSubmit = () => {
     if (hasStarted) return
 
-    if (command.trim().toLowerCase() === launchCommand) {
+    const currentCommand = inputRef.current?.value ?? ''
+
+    if (currentCommand.trim().toLowerCase() === launchCommand) {
       startBootSequence()
       return
     }
@@ -46,6 +50,12 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleSubmit()
+    }
+  }
+
+  const handleCommandInput = () => {
+    if (hasError) {
+      setHasError(false)
     }
   }
 
@@ -170,11 +180,8 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
                 <input
                   ref={inputRef}
-                  value={command}
-                  onChange={(event) => {
-                    setCommand(event.target.value)
-                    setHasError(false)
-                  }}
+                  defaultValue=""
+                  onInput={handleCommandInput}
                   onKeyDown={handleKeyDown}
                   className="w-full bg-transparent text-white caret-yellow-300 outline-none placeholder:text-white/25"
                   placeholder="npm run apd"
