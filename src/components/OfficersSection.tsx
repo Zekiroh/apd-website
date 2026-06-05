@@ -60,13 +60,25 @@ function OfficerGroup({
                     </div>
 
                     <div className="mt-4 min-h-13">
-                      <div className="flex flex-wrap items-center justify-center gap-2">
-                        <p className="text-sm leading-6 text-white/50 transition group-hover:text-white/70">
+                      <div className="flex flex-col items-center justify-center">
+                        <p className="text-center text-sm leading-6 text-white/50 transition group-hover:text-white/70">
                           {officer.name}
                         </p>
 
                         {officer.badge && (
-                          <span className="rounded-full border border-yellow-300/30 bg-yellow-400/10 px-2 py-0.5 text-[10px] font-bold tracking-wide text-yellow-300">
+                          <span
+                            className="
+                              mt-2
+                              rounded-full
+                              border border-yellow-400/40
+                              bg-yellow-400/15
+                              px-2 py-0.5
+                              text-[10px]
+                              font-semibold
+                              tracking-wide
+                              text-yellow-200
+                            "
+                          >
                             {officer.badge}
                           </span>
                         )}
@@ -133,7 +145,7 @@ export default function OfficersSection() {
                     className="mt-2 inline-flex items-center gap-2 text-2xl font-black outline-none transition hover:text-yellow-300 focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                   >
                     {adviser.name}
-                    <ArrowUpRight size={18} />
+                    <ArrowUpRight size={18} className="text-yellow-300" />
                   </a>
 
                   <p className="mt-1 text-white/55">{adviser.role}</p>

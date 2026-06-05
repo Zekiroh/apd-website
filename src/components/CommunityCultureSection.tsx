@@ -1,8 +1,8 @@
-import { Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import apdLogo from '../assets/apd-logo.png'
-import leadershipVideo from '../assets/videos/apd-leadership-sy2425.mp4'
 import {
+  communityFeaturedStories,
   communityGalleryItems,
   communityHighlights,
   communityValues,
@@ -17,8 +17,10 @@ export default function CommunityCultureSection() {
     number | null
   >(null)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [activeStoryIndex, setActiveStoryIndex] = useState(0)
   const [isVideoOpen, setIsVideoOpen] = useState(false)
 
+  const activeStory = communityFeaturedStories[activeStoryIndex]
   const selectedGalleryItem =
     selectedGalleryIndex === null
       ? null
@@ -36,6 +38,28 @@ export default function CommunityCultureSection() {
 
   const closeVideo = () => {
     setIsVideoOpen(false)
+  }
+
+  const goToNextStory = () => {
+    setIsVideoOpen(false)
+    setActiveStoryIndex((currentIndex) =>
+      currentIndex === communityFeaturedStories.length - 1
+        ? 0
+        : currentIndex + 1,
+    )
+  }
+
+  const goToPreviousStory = () => {
+    setIsVideoOpen(false)
+    setActiveStoryIndex((currentIndex) =>
+      currentIndex === 0
+        ? communityFeaturedStories.length - 1
+        : currentIndex - 1,
+    )
+  }
+
+  const openActiveStory = () => {
+    setIsVideoOpen(true)
   }
 
   const goToNextLightboxImage = useCallback(() => {
@@ -149,19 +173,15 @@ export default function CommunityCultureSection() {
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setIsVideoOpen(true)}
-                className="group relative min-h-80 overflow-hidden bg-black text-left lg:min-h-72"
-                aria-label="Watch APD leadership story"
-              >
+              <div className="relative min-h-80 overflow-hidden bg-black lg:min-h-72">
                 <video
-                  src={leadershipVideo}
+                  key={activeStory.videoSrc}
+                  src={activeStory.videoSrc}
                   muted
                   loop
                   playsInline
                   autoPlay
-                  className="absolute inset-0 h-full w-full object-cover opacity-55 transition duration-700 group-hover:scale-105 group-hover:opacity-70"
+                  className="absolute inset-0 h-full w-full object-cover opacity-55 transition duration-700 hover:scale-105 hover:opacity-70"
                 />
 
                 <div className="absolute inset-0 bg-linear-to-t from-black via-black/55 to-black/20" />
@@ -169,26 +189,71 @@ export default function CommunityCultureSection() {
 
                 <div className="relative flex h-full min-h-80 flex-col justify-end p-8 sm:p-10 lg:min-h-72">
                   <p className="text-sm font-semibold uppercase tracking-[0.25em] text-yellow-300">
-                    Leadership Story
+                    {activeStory.eyebrow}
                   </p>
 
                   <h3 className="mt-3 text-2xl font-bold sm:text-3xl">
-                    APD Leadership SY2425
+                    {activeStory.title}
                   </h3>
 
                   <p className="mt-4 max-w-md leading-7 text-white/70">
-                    A glimpse into the people, experiences, and leadership
-                    journey that shaped APD throughout the academic year.
+                    {activeStory.description}
                   </p>
 
-                  <span className="mt-7 inline-flex w-fit items-center gap-3 rounded-full border border-yellow-300/30 bg-yellow-400/10 px-5 py-3 text-sm font-semibold text-yellow-200 transition group-hover:border-yellow-300/60 group-hover:bg-yellow-400/20 group-hover:text-yellow-100">
-                    Watch Story
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-yellow-300 text-black">
-                      <Play size={14} fill="currentColor" />
-                    </span>
-                  </span>
+                  <div className="mt-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+                    <button
+                      type="button"
+                      onClick={openActiveStory}
+                      className="group inline-flex w-fit items-center gap-3 rounded-full border border-yellow-300/30 bg-yellow-400/10 px-5 py-3 text-sm font-semibold text-yellow-200 transition hover:border-yellow-300/60 hover:bg-yellow-400/20 hover:text-yellow-100"
+                      aria-label={`Watch ${activeStory.title}`}
+                    >
+                      Watch Story
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-yellow-300 text-black">
+                        <Play size={14} fill="currentColor" />
+                      </span>
+                    </button>
+
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={goToPreviousStory}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition hover:border-yellow-300/40 hover:bg-yellow-400/10 hover:text-yellow-200"
+                        aria-label="Previous featured story"
+                      >
+                        <ChevronLeft size={18} />
+                      </button>
+
+                      <div className="flex items-center gap-2">
+                        {communityFeaturedStories.map((story, index) => (
+                          <button
+                            key={story.title}
+                            type="button"
+                            onClick={() => {
+                              setIsVideoOpen(false)
+                              setActiveStoryIndex(index)
+                            }}
+                            className={`h-2 rounded-full transition ${
+                              index === activeStoryIndex
+                                ? 'w-6 bg-yellow-300'
+                                : 'w-2 bg-white/25 hover:bg-yellow-300/60'
+                            }`}
+                            aria-label={`Show ${story.title}`}
+                          />
+                        ))}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={goToNextStory}
+                        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition hover:border-yellow-300/40 hover:bg-yellow-400/10 hover:text-yellow-200"
+                        aria-label="Next featured story"
+                      >
+                        <ChevronRight size={18} />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </button>
+              </div>
             </div>
           </div>
         </Reveal>
@@ -275,7 +340,12 @@ export default function CommunityCultureSection() {
       )}
 
       {isVideoOpen && (
-        <CommunityVideoModal videoSrc={leadershipVideo} onClose={closeVideo} />
+        <CommunityVideoModal
+          eyebrow={activeStory.eyebrow}
+          title={activeStory.title}
+          videoSrc={activeStory.videoSrc}
+          onClose={closeVideo}
+        />
       )}
     </section>
   )

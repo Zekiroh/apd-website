@@ -1,6 +1,6 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import apdLogo from '../assets/apd-logo.png'
 
 const joinApdFormUrl =
@@ -9,20 +9,50 @@ const joinApdFormUrl =
 const sections = [
   { id: 'about', label: 'About' },
   { id: 'works', label: 'What We Do' },
+  { id: 'community', label: 'Community' },
   { id: 'projects', label: 'Projects' },
-  { id: 'officers', label: 'Officers' },
   { id: 'events', label: 'Events' },
   { id: 'contact', label: 'Contact' },
 ]
 
 export default function Navbar() {
+  const shouldReduceMotion = useReducedMotion()
+  const previousScrollY = useRef(0)
+
   const [scrolled, setScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 30)
+    let ticking = false
+
+    const updateNavigationState = () => {
+      const currentScrollY = window.scrollY
+      const isScrollingDown = currentScrollY > previousScrollY.current
+      const isNearTop = currentScrollY < 80
+
+      setScrolled(currentScrollY > 30)
+      setIsNavbarVisible(
+        isNearTop ||
+          !isScrollingDown ||
+          isMenuOpen ||
+          shouldReduceMotion === true,
+      )
+
+      previousScrollY.current = currentScrollY
+
+      const firstSection = document.getElementById(sections[0].id)
+
+      if (firstSection) {
+        const firstSectionTop = firstSection.getBoundingClientRect().top
+
+        if (firstSectionTop > 160) {
+          setActiveSection('')
+          ticking = false
+          return
+        }
+      }
 
       const current = sections.find((section) => {
         const element = document.getElementById(section.id)
@@ -31,27 +61,37 @@ export default function Navbar() {
 
         const rect = element.getBoundingClientRect()
 
-        return rect.top <= 140 && rect.bottom >= 140
+        return rect.top <= 160 && rect.bottom >= 160
       })
 
-      if (current) {
-        setActiveSection(current.id)
-      }
+      setActiveSection(current?.id ?? '')
+      ticking = false
     }
 
-    window.addEventListener('scroll', handleScroll)
-    handleScroll()
+    const handleScroll = () => {
+      if (ticking) return
+
+      ticking = true
+      window.requestAnimationFrame(updateNavigationState)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    updateNavigationState()
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [isMenuOpen, shouldReduceMotion])
 
   useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? 'hidden' : ''
+    const previousOverflow = document.body.style.overflow
+
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    }
 
     return () => {
-      document.body.style.overflow = ''
+      document.body.style.overflow = previousOverflow
     }
   }, [isMenuOpen])
 
@@ -66,7 +106,7 @@ export default function Navbar() {
 
     window.setTimeout(() => {
       element?.scrollIntoView({
-        behavior: 'smooth',
+        behavior: shouldReduceMotion === true ? 'auto' : 'smooth',
         block: 'start',
       })
     }, 100)
@@ -75,16 +115,21 @@ export default function Navbar() {
   return (
     <motion.nav
       aria-label="Main navigation"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.7,
-        ease: [0.22, 1, 0.36, 1],
+      initial={shouldReduceMotion === true ? false : { opacity: 0, y: -20 }}
+      animate={{
+        opacity: isNavbarVisible ? 1 : 0,
+        y: isNavbarVisible ? 0 : -110,
       }}
-      className={`sticky top-4 z-50 mx-auto max-w-7xl rounded-2xl border px-4 py-4 transition-all duration-300 sm:px-5 ${
+      transition={{
+        duration: shouldReduceMotion === true ? 0 : 0.28,
+        ease: 'easeOut',
+      }}
+      className={`fixed left-1/2 top-4 z-50 w-[calc(100%-2rem)] max-w-7xl -translate-x-1/2 rounded-2xl border px-4 py-4 transition-all duration-300 sm:px-5 ${
+        isNavbarVisible ? 'pointer-events-auto' : 'pointer-events-none'
+      } ${
         scrolled
-          ? 'border-yellow-300/20 bg-black/70 shadow-lg shadow-yellow-500/10 backdrop-blur-2xl'
-          : 'border-white/10 bg-white/3 backdrop-blur-xl'
+          ? 'border-yellow-300/20 bg-black/80 shadow-lg shadow-yellow-500/10 backdrop-blur-md'
+          : 'border-white/10 bg-[#101112]/85 backdrop-blur-md'
       }`}
     >
       <div className="flex items-center justify-between gap-4">
@@ -92,6 +137,7 @@ export default function Navbar() {
           href="#"
           onClick={closeMenu}
           className="flex min-w-0 items-center gap-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          aria-label="Go to top"
         >
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-yellow-300/20 bg-black/40 p-1.5 shadow-lg shadow-yellow-500/10 sm:h-12 sm:w-12">
             <img
@@ -130,6 +176,11 @@ export default function Navbar() {
                 <motion.span
                   layoutId="active-nav"
                   className="absolute -bottom-2 left-0 h-0.5 w-full rounded-full bg-yellow-300"
+                  transition={
+                    shouldReduceMotion === true
+                      ? { duration: 0 }
+                      : { duration: 0.25, ease: 'easeOut' }
+                  }
                 />
               )}
             </a>
@@ -149,7 +200,9 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setIsMenuOpen((current) => !current)}
-            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-label={
+              isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'
+            }
             aria-expanded={isMenuOpen}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white outline-none transition hover:border-yellow-300/40 hover:bg-yellow-400/10 hover:text-yellow-300 focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:hidden"
           >
@@ -161,9 +214,17 @@ export default function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -8, height: 0 }}
+            initial={
+              shouldReduceMotion === true
+                ? false
+                : { opacity: 0, y: -8, height: 0 }
+            }
             animate={{ opacity: 1, y: 0, height: 'auto' }}
-            exit={{ opacity: 0, y: -8, height: 0 }}
+            exit={
+              shouldReduceMotion === true
+                ? { opacity: 0 }
+                : { opacity: 0, y: -8, height: 0 }
+            }
             transition={{ duration: 0.25, ease: 'easeOut' }}
             className="overflow-hidden lg:hidden"
           >

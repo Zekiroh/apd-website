@@ -62,6 +62,10 @@ import welcomeCelebrationHoopshotImage from '../assets/community/welcome-celebra
 import welcomeCelebrationImage from '../assets/community/welcome-celebration-2024.jpg'
 import welcomeCelebrationInclusivesImage from '../assets/community/welcome-celebration-inclusives.jpg'
 import welcomeCelebrationPlayersImage from '../assets/community/welcome-celebration-players.jpg'
+import leadershipVideo from '../assets/videos/apd-leadership-sy2425.mp4'
+import eventsHighlightsVideo from '../assets/videos/apd-events-highlights.mp4'
+import leadershipVideo2526 from '../assets/videos/apd-leadership-sy2526.mp4'
+import itWeek2025Video from '../assets/videos/it-week-2025.mp4'
 
 export const highlights = [
   {
@@ -119,8 +123,36 @@ export const featuredProjects = [
   },
 ]
 
-export const communityVideoUrl =
-  'https://www.facebook.com/reel/893277285620052'
+export const communityFeaturedStories = [
+  {
+    eyebrow: 'Leadership Story',
+    title: 'APD Leadership SY2425',
+    description:
+      'A glimpse into the people, experiences, and leadership journey that shaped APD throughout the academic year.',
+    videoSrc: leadershipVideo,
+  },
+  {
+    eyebrow: 'Event Highlights',
+    title: 'Geeky Gateway & Capstone Excellence',
+    description:
+      'A journey of innovation, learning, student excellence, inspiring talks, and memorable APD experiences through Geeky Gateway and Capstone Excellence.',
+    videoSrc: eventsHighlightsVideo,
+  },
+  {
+    eyebrow: 'Leadership Story',
+    title: 'APD Leadership SY2526',
+    description:
+      'The next chapter of APD continues as a new generation of leaders, innovators, and developers builds upon the organization’s growing legacy.',
+    videoSrc: leadershipVideo2526,
+  },
+  {
+    eyebrow: 'IT Week 2025',
+    title: 'Where Talents Meet',
+    description:
+      'A celebration of creativity, collaboration, friendship, and student talent during IT Week 2025, showcasing the energy and spirit of the APD community.',
+    videoSrc: itWeek2025Video,
+  },
+]
 
 export const communityHighlights = [
   {
@@ -195,7 +227,7 @@ export const communityGalleryItems = [
     category: 'Emerging Technologies',
     images: [
       web3aiImage,
-      web3aiGroupImage, 
+      web3aiGroupImage,
       web3aiGroupImage2,
       web3aiGroupImage3,
       web3aiGroupImage4,
@@ -218,8 +250,8 @@ export const communityGalleryItems = [
     images: [
       gameAndGoImage,
       gameAndGoImage1,
-      gameAndGoImage2, 
-      gameAndGoPcImage, 
+      gameAndGoImage2,
+      gameAndGoPcImage,
       gameAndGoPsImage,
       gameAndGoHeartImage,
     ],

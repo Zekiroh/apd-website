@@ -2,6 +2,7 @@ import {
   DiscordLogoIcon,
   EnvelopeClosedIcon,
 } from '@radix-ui/react-icons'
+import { ArrowUpRight } from 'lucide-react'
 import apdLogo from '../assets/apd-logo.png'
 
 export default function Footer() {
@@ -45,9 +46,14 @@ export default function Footer() {
                 href="https://www.feudiliman.edu.ph/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-flex text-sm font-medium text-white/65 transition hover:text-yellow-300"
+                className="group mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-white/70 outline-none transition-colors duration-200 hover:text-yellow-300 focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               >
                 FEU Diliman
+
+                <ArrowUpRight
+                  size={14}
+                  className="text-yellow-300 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
               </a>
             </div>
           </div>

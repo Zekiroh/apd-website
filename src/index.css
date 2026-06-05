@@ -35,12 +35,17 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(245, 197, 66, 0.35);
+  background: #d4af37;
   border-radius: 999px;
+  border: 2px solid #050607;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 197, 66, 0.6);
+  background: #facc15;
+}
+
+::-webkit-scrollbar-corner {
+  background: #050607;
 }
 
 @keyframes float {

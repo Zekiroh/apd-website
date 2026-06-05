@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useRef, type TouchEvent } from 'react'
+import { createPortal } from 'react-dom'
 import type { GalleryItem } from './types'
 
 type CommunityGalleryLightboxProps = {
@@ -19,6 +20,9 @@ export default function CommunityGalleryLightbox({
   onPrevious,
   onSelectImage,
 }: CommunityGalleryLightboxProps) {
+  const touchStartX = useRef<number | null>(null)
+  const touchStartY = useRef<number | null>(null)
+
   const hasMultipleImages = item.images.length > 1
 
   useEffect(() => {
@@ -30,8 +34,53 @@ export default function CommunityGalleryLightbox({
     }
   }, [])
 
-  return (
-    <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/90 px-4 py-6 backdrop-blur-md">
+  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0]
+
+    if (!touch) return
+
+    touchStartX.current = touch.clientX
+    touchStartY.current = touch.clientY
+  }
+
+  const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    if (!hasMultipleImages) return
+
+    const touch = event.changedTouches[0]
+
+    if (
+      !touch ||
+      touchStartX.current === null ||
+      touchStartY.current === null
+    ) {
+      return
+    }
+
+    const deltaX = touch.clientX - touchStartX.current
+    const deltaY = touch.clientY - touchStartY.current
+
+    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY)
+    const hasEnoughSwipeDistance = Math.abs(deltaX) > 50
+
+    if (isHorizontalSwipe && hasEnoughSwipeDistance) {
+      if (deltaX < 0) {
+        onNext()
+      } else {
+        onPrevious()
+      }
+    }
+
+    touchStartX.current = null
+    touchStartY.current = null
+  }
+
+  const lightboxContent = (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 px-4 py-6"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${item.title} gallery`}
+    >
       <div className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#07080a]">
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6">
           <div>
@@ -54,11 +103,16 @@ export default function CommunityGalleryLightbox({
           </button>
         </div>
 
-        <div className="relative flex min-h-[55vh] items-center justify-center bg-black">
+        <div
+          className="relative flex min-h-[55vh] touch-pan-y items-center justify-center bg-black"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <img
             src={item.images[activeImageIndex]}
             alt={item.title}
-            className="max-h-[70vh] w-full object-contain"
+            className="max-h-[70vh] w-full select-none object-contain"
+            draggable={false}
           />
 
           {hasMultipleImages && (
@@ -104,4 +158,6 @@ export default function CommunityGalleryLightbox({
       </div>
     </div>
   )
+
+  return createPortal(lightboxContent, document.body)
 }
