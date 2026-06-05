@@ -130,6 +130,7 @@ export const communityFeaturedStories = [
     description:
       'A glimpse into the people, experiences, and leadership journey that shaped APD throughout the academic year.',
     videoSrc: leadershipVideo,
+    videoUrl: 'https://www.facebook.com/reel/893277285620052',
   },
   {
     eyebrow: 'Event Highlights',
@@ -137,6 +138,7 @@ export const communityFeaturedStories = [
     description:
       'A journey of innovation, learning, student excellence, inspiring talks, and memorable APD experiences through Geeky Gateway and Capstone Excellence.',
     videoSrc: eventsHighlightsVideo,
+    videoUrl: 'https://www.facebook.com/reel/599148379339006',
   },
   {
     eyebrow: 'Leadership Story',
@@ -144,6 +146,7 @@ export const communityFeaturedStories = [
     description:
       'The next chapter of APD continues as a new generation of leaders, innovators, and developers builds upon the organization’s growing legacy.',
     videoSrc: leadershipVideo2526,
+    videoUrl: 'https://www.facebook.com/reel/799607815985301'
   },
   {
     eyebrow: 'IT Week 2025',
@@ -151,6 +154,7 @@ export const communityFeaturedStories = [
     description:
       'A celebration of creativity, collaboration, friendship, and student talent during IT Week 2025, showcasing the energy and spirit of the APD community.',
     videoSrc: itWeek2025Video,
+    videoUrl: 'https://www.facebook.com/reel/1344134323730538',
   },
 ]
 

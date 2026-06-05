@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { TouchEvent } from 'react'
 import Reveal from '../Reveal'
@@ -25,6 +26,7 @@ export default function CommunityGalleryCard({
   const didSwipeRef = useRef(false)
 
   const hasMultipleImages = item.images.length > 1
+  const activeImage = item.images[activeImageIndex] ?? item.images[0]
 
   const goToNextImage = useCallback(() => {
     setActiveImageIndex((currentIndex) =>
@@ -127,17 +129,19 @@ export default function CommunityGalleryCard({
           className="absolute inset-0 z-10 cursor-pointer"
         />
 
-        {item.images.map((image, imageIndex) => (
-          <img
-            key={image}
-            src={image}
+        <AnimatePresence initial={false}>
+          <motion.img
+            key={activeImage}
+            src={activeImage}
             alt={item.title}
-            className={`absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105 ${
-              imageIndex === activeImageIndex ? 'opacity-100' : 'opacity-0'
-            }`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             draggable={false}
           />
-        ))}
+        </AnimatePresence>
 
         <div className="absolute inset-0 bg-linear-to-t from-black via-black/35 to-transparent" />
 

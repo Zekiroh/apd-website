@@ -181,6 +181,7 @@ export default function CommunityCultureSection() {
                   loop
                   playsInline
                   autoPlay
+                  preload="metadata"
                   className="absolute inset-0 h-full w-full object-cover opacity-55 transition duration-700 hover:scale-105 hover:opacity-70"
                 />
 
@@ -344,6 +345,7 @@ export default function CommunityCultureSection() {
           eyebrow={activeStory.eyebrow}
           title={activeStory.title}
           videoSrc={activeStory.videoSrc}
+          videoUrl={activeStory.videoUrl}
           onClose={closeVideo}
         />
       )}

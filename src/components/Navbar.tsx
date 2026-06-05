@@ -23,6 +23,33 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isNavbarVisible, setIsNavbarVisible] = useState(true)
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
+
+  useEffect(() => {
+    const handleVideoModalChange = (event: Event) => {
+      const customEvent = event as CustomEvent<boolean>
+      const isOpen = Boolean(customEvent.detail)
+
+      setIsVideoModalOpen(isOpen)
+
+      if (isOpen) {
+        setIsMenuOpen(false)
+        setIsNavbarVisible(false)
+      }
+    }
+
+    window.addEventListener(
+      'apd-video-modal-change',
+      handleVideoModalChange as EventListener,
+    )
+
+    return () => {
+      window.removeEventListener(
+        'apd-video-modal-change',
+        handleVideoModalChange as EventListener,
+      )
+    }
+  }, [])
 
   useEffect(() => {
     let ticking = false
@@ -33,6 +60,14 @@ export default function Navbar() {
       const isNearTop = currentScrollY < 80
 
       setScrolled(currentScrollY > 30)
+
+      if (isVideoModalOpen) {
+        setIsNavbarVisible(false)
+        previousScrollY.current = currentScrollY
+        ticking = false
+        return
+      }
+
       setIsNavbarVisible(
         isNearTop ||
           !isScrollingDown ||
@@ -81,7 +116,7 @@ export default function Navbar() {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [isMenuOpen, shouldReduceMotion])
+  }, [isMenuOpen, isVideoModalOpen, shouldReduceMotion])
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow

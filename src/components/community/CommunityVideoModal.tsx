@@ -1,9 +1,11 @@
-import { X } from 'lucide-react'
+import { ExternalLink, X } from 'lucide-react'
+import { useEffect } from 'react'
 
 type CommunityVideoModalProps = {
   eyebrow: string
   title: string
   videoSrc: string
+  videoUrl?: string
   onClose: () => void
 }
 
@@ -11,23 +13,52 @@ export default function CommunityVideoModal({
   eyebrow,
   title,
   videoSrc,
+  videoUrl,
   onClose,
 }: CommunityVideoModalProps) {
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+
+    document.body.style.overflow = 'hidden'
+    window.dispatchEvent(
+      new CustomEvent('apd-video-modal-change', { detail: true }),
+    )
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.dispatchEvent(
+        new CustomEvent('apd-video-modal-change', { detail: false }),
+      )
+    }
+  }, [])
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 px-4 py-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 px-4 py-5 sm:py-6"
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
-      <div className="w-full max-w-5xl overflow-hidden rounded-3xl border border-white/10 bg-[#08090b] shadow-2xl shadow-black/50">
-        <div className="flex items-center justify-between gap-4 border-b border-white/10 p-5 sm:p-6">
-          <div>
+      <div className="flex max-h-[88vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#08090b] shadow-2xl shadow-black/50">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 p-5 sm:p-6">
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-yellow-300">
               {eyebrow}
             </p>
 
             <h3 className="mt-1 text-xl font-bold sm:text-2xl">{title}</h3>
+
+            {videoUrl && (
+              <a
+                href={videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex w-fit items-center gap-1.5 text-xs font-semibold text-yellow-300/80 transition hover:text-yellow-200"
+              >
+                Watch on Facebook
+                <ExternalLink size={13} aria-hidden="true" />
+              </a>
+            )}
           </div>
 
           <button
@@ -40,12 +71,16 @@ export default function CommunityVideoModal({
           </button>
         </div>
 
-        <video
-          src={videoSrc}
-          controls
-          autoPlay
-          className="max-h-[72vh] w-full bg-black sm:max-h-[78vh]"
-        />
+        <div className="flex min-h-0 flex-1 items-center justify-center bg-black">
+          <video
+            src={videoSrc}
+            controls
+            autoPlay
+            playsInline
+            preload="metadata"
+            className="aspect-video max-h-[72vh] w-full bg-black object-contain sm:max-h-[74vh]"
+          />
+        </div>
       </div>
     </div>
   )

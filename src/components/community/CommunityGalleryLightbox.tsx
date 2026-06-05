@@ -76,14 +76,14 @@ export default function CommunityGalleryLightbox({
 
   const lightboxContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 px-4 py-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 px-4 py-5 sm:py-6"
       role="dialog"
       aria-modal="true"
       aria-label={`${item.title} gallery`}
     >
-      <div className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#07080a]">
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6">
-          <div>
+      <div className="relative flex max-h-[88vh] w-full max-w-6xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#07080a]">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 px-5 py-4 sm:px-6">
+          <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-yellow-300">
               {item.category}
             </p>
@@ -104,14 +104,14 @@ export default function CommunityGalleryLightbox({
         </div>
 
         <div
-          className="relative flex min-h-[55vh] touch-pan-y items-center justify-center bg-black"
+          className="relative flex h-[58vh] min-h-80 shrink-0 touch-pan-y items-center justify-center bg-black sm:h-[64vh] sm:min-h-105"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
           <img
             src={item.images[activeImageIndex]}
             alt={item.title}
-            className="max-h-[70vh] w-full select-none object-contain"
+            className="h-full w-full select-none object-contain"
             draggable={false}
           />
 
@@ -139,7 +139,7 @@ export default function CommunityGalleryLightbox({
         </div>
 
         {hasMultipleImages && (
-          <div className="flex items-center justify-center gap-2 border-t border-white/10 px-5 py-4">
+          <div className="flex shrink-0 items-center justify-center gap-2 border-t border-white/10 px-5 py-4">
             {item.images.map((image, imageIndex) => (
               <button
                 key={image}
