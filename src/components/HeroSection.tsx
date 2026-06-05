@@ -95,7 +95,7 @@ export default function HeroSection({ isPageReady }: HeroSectionProps) {
 
           return currentLength + 1
         })
-      }, 22)
+      }, 35)
 
       return () => {
         window.clearInterval(interval)
