@@ -33,6 +33,9 @@ export default function TerminalEffects({ particles }: TerminalEffectsProps) {
             left: `${particle.left}%`,
             bottom: '4.5rem',
             fontSize: `${particle.size}px`,
+            willChange: 'transform, opacity',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
           }}
         >
           ❤

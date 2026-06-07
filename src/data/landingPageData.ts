@@ -134,7 +134,7 @@ export const communityFeaturedStories = [
   },
   {
     eyebrow: 'Event Highlights',
-    title: 'Geeky Gateway & Capstone Excellence',
+    title: 'Geeky Gateway\n& Capstone Excellence',
     description:
       'A journey of innovation, learning, student excellence, inspiring talks, and memorable APD experiences through Geeky Gateway and Capstone Excellence.',
     videoSrc: eventsHighlightsVideo,

@@ -20,7 +20,8 @@ export default function CommunityCultureSection() {
   const [activeStoryIndex, setActiveStoryIndex] = useState(0)
   const [isVideoOpen, setIsVideoOpen] = useState(false)
 
-  const activeStory = communityFeaturedStories[activeStoryIndex]
+  const activeStory =
+    communityFeaturedStories[activeStoryIndex] ?? communityFeaturedStories[0]
   const selectedGalleryItem =
     selectedGalleryIndex === null
       ? null
@@ -193,11 +194,11 @@ export default function CommunityCultureSection() {
                     {activeStory.eyebrow}
                   </p>
 
-                  <h3 className="mt-3 text-2xl font-bold sm:text-3xl">
+                  <h3 className="mt-3 min-h-18 whitespace-pre-line text-2xl font-bold leading-tight sm:text-3xl lg:min-h-0">
                     {activeStory.title}
                   </h3>
 
-                  <p className="mt-4 max-w-md leading-7 text-white/70">
+                  <p className="mt-4 min-h-42 max-w-md leading-7 text-white/70 lg:min-h-0">
                     {activeStory.description}
                   </p>
 
@@ -340,7 +341,7 @@ export default function CommunityCultureSection() {
         />
       )}
 
-      {isVideoOpen && (
+      {isVideoOpen && activeStory && (
         <CommunityVideoModal
           eyebrow={activeStory.eyebrow}
           title={activeStory.title}

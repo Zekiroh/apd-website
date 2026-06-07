@@ -9,6 +9,10 @@ import {
   getTerminalSequence,
   TERMINAL_AUDIO_SOURCE,
 } from './terminal/terminalSequences'
+import {
+  playTerminalDiagnosticAudio,
+  playTerminalErrorAudio,
+} from './terminal/systemAudio'
 import type { HeartParticle } from './terminal/types'
 
 type LoadingScreenProps = {
@@ -27,7 +31,6 @@ const LEGACY_SECOND_MESSAGE_VISIBLE_TIME = 2200
 const LEGACY_RESET_DELAY = 650
 
 const DEV_TYPING_SPEED = 55
-const DEV_SECOND_MESSAGE_DELAY = 700
 const DEV_VISIBLE_TIME = 1800
 
 const HEART_VISIBLE_TIME = 4600
@@ -37,6 +40,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
+  const [commandValue, setCommandValue] = useState('')
   const [hasStarted, setHasStarted] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [visibleLineCount, setVisibleLineCount] = useState(0)
@@ -61,9 +65,14 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const diagnosticSequence = getTerminalSequence('diagnostic')
   const visualSequence = getTerminalSequence('visual')
 
+  const highlightedRoute = resolveTerminalRoute(commandValue)
+  const isCommandHighlighted =
+    highlightedRoute === 'archive' || highlightedRoute === 'visual'
+
   const startBootSequence = () => {
     if (inputRef.current && launchSequence) {
       inputRef.current.value = launchSequence.command
+      setCommandValue(launchSequence.command)
     }
 
     setHasError(false)
@@ -75,7 +84,15 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
     if (inputRef.current) {
       inputRef.current.value = archiveSequence.command
+      setCommandValue(archiveSequence.command)
       inputRef.current.blur()
+
+      window.setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.value = ''
+          setCommandValue('')
+        }
+      }, 2200)
     }
 
     if (audioRef.current) {
@@ -96,6 +113,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     setIsArchiveMessageVisible(false)
     setArchiveTypedText('')
     setIsArchiveMode(false)
+    setCommandValue('')
 
     if (inputRef.current) {
       inputRef.current.value = ''
@@ -108,6 +126,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
     if (inputRef.current) {
       inputRef.current.value = diagnosticSequence.command
+      setCommandValue(diagnosticSequence.command)
       inputRef.current.blur()
     }
 
@@ -115,12 +134,14 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     setIsDiagnosticMode(true)
     setDiagnosticTypedText('')
     setIsDiagnosticMessageVisible(false)
+    playTerminalDiagnosticAudio()
   }
 
   const resetDiagnosticSequence = () => {
     setIsDiagnosticMessageVisible(false)
     setDiagnosticTypedText('')
     setIsDiagnosticMode(false)
+    setCommandValue('')
 
     if (inputRef.current) {
       inputRef.current.value = ''
@@ -133,6 +154,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
     if (inputRef.current) {
       inputRef.current.value = visualSequence.command
+      setCommandValue(visualSequence.command)
       inputRef.current.blur()
     }
 
@@ -141,6 +163,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
     window.setTimeout(() => {
       setHeartParticles([])
+      setCommandValue('')
 
       if (inputRef.current) {
         inputRef.current.value = ''
@@ -176,6 +199,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     }
 
     setHasError(true)
+    playTerminalErrorAudio()
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -184,7 +208,9 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
     }
   }
 
-  const handleCommandInput = () => {
+  const handleCommandInput = (event: React.FormEvent<HTMLInputElement>) => {
+    setCommandValue(event.currentTarget.value)
+
     if (hasError) {
       setHasError(false)
     }
@@ -330,48 +356,39 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
       return
     }
 
-    let firstTypingInterval: number | null = null
-    let secondTypingInterval: number | null = null
-    let secondMessageTimeout: number | null = null
+    let typingInterval: number | null = null
     let resetTimeout: number | null = null
+    let startTimeout: number | null = null
 
-    const [firstMessage, secondMessage] = diagnosticSequence.messages
+    const [message] = diagnosticSequence.messages
 
-    const typeMessage = (message: string, onCompleteTyping?: () => void) => {
-      let characterIndex = 0
+    if (!message) return
 
+    let characterIndex = 0
+
+    startTimeout = window.setTimeout(() => {
       setIsDiagnosticMessageVisible(true)
       setDiagnosticTypedText('')
 
-      const interval = window.setInterval(() => {
+      typingInterval = window.setInterval(() => {
         characterIndex += 1
         setDiagnosticTypedText(message.slice(0, characterIndex))
 
         if (characterIndex >= message.length) {
-          window.clearInterval(interval)
-          onCompleteTyping?.()
-        }
-      }, DEV_TYPING_SPEED)
+          if (typingInterval) {
+            window.clearInterval(typingInterval)
+          }
 
-      return interval
-    }
-
-    if (!firstMessage || !secondMessage) return
-
-    firstTypingInterval = typeMessage(firstMessage, () => {
-      secondMessageTimeout = window.setTimeout(() => {
-        secondTypingInterval = typeMessage(secondMessage, () => {
           resetTimeout = window.setTimeout(() => {
             resetDiagnosticSequence()
           }, DEV_VISIBLE_TIME)
-        })
-      }, DEV_SECOND_MESSAGE_DELAY)
-    })
+        }
+      }, DEV_TYPING_SPEED)
+    }, 0)
 
     return () => {
-      if (firstTypingInterval) window.clearInterval(firstTypingInterval)
-      if (secondTypingInterval) window.clearInterval(secondTypingInterval)
-      if (secondMessageTimeout) window.clearTimeout(secondMessageTimeout)
+      if (startTimeout) window.clearTimeout(startTimeout)
+      if (typingInterval) window.clearInterval(typingInterval)
       if (resetTimeout) window.clearTimeout(resetTimeout)
     }
   }, [diagnosticSequence, isDiagnosticMode, shouldReduceMotion])
@@ -450,7 +467,11 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                   disabled={isArchiveMode || isDiagnosticMode}
                   onInput={handleCommandInput}
                   onKeyDown={handleKeyDown}
-                  className="w-full bg-transparent text-white caret-yellow-300 outline-none placeholder:text-white/25 disabled:cursor-default disabled:text-white"
+                  className={`w-full bg-transparent caret-yellow-300 outline-none placeholder:text-white/25 transition-[color,font-weight] duration-200 disabled:cursor-default disabled:text-white ${
+                    isCommandHighlighted
+                      ? 'font-bold text-yellow-300'
+                      : 'font-normal text-white'
+                  }`}
                   placeholder="npm run apd"
                   autoComplete="off"
                   spellCheck={false}
@@ -542,7 +563,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
               <p
                 className={getBootLineClassName(
                   visibleLineCount > bootLines.length + 1,
-                  'text-yellow-300',
+                  'text-yellow-300'
                 )}
               >
                 launch(APD);
